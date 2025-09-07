@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aniversário da Melissa - 1 Aninho | Guardiã do Bosque Encantado</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;700&family=Bubblegum+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span>🍯 Mel</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link">Início</a></li>
+                <li><a href="#about" class="nav-link">A Festa</a></li>
+                <li><a href="#info" class="nav-link">Informações</a></li>
+                <li><a href="#gifts" class="nav-link">Presentes</a></li>
+                <li><a href="#gallery" class="nav-link">Galeria</a></li>
+                <li><a href="#rsvp" class="nav-link">Confirmar</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">Melissa faz 1 aninho!</h1>
+                <p class="hero-subtitle">Venha celebrar com a nova Guardiã do Bosque Encantado</p>
+                <div class="hero-date">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>14/12/2025</span>
+                </div>
+                <div class="hero-location">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Recife - PE</span>
+                </div>
+                <button class="cta-button" onclick="scrollToSection('info')">
+                    <i class="fas fa-gift"></i>
+                    Ver Detalhes da Festa
+                </button>
+            </div>
+            <div class="hero-image">
+                <div class="birthday-girl-photo">
+                    <div class="photo-frame">
+                        <div class="birthday-photo-placeholder">
+                            <i class="fas fa-heart"></i>
+                            <p>Foto da Mel</p>
+                            <small>Adicione aqui a foto da aniversariante</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="section-header">
+                <h2>A Nova Guardiã do Bosque</h2>
+                <p>Nossa pequena Mel está crescendo e se tornando a nova guardiã do Bosque dos Cem Acres</p>
+            </div>
+            <div class="about-content">
+                <div class="about-text">
+                    <div class="story-card">
+                        <h3>🍯 A História da Mel</h3>
+                        <p>Há um ano, uma pequena guardiã chegou ao mundo para cuidar do nosso bosque encantado. Melissa, carinhosamente chamada de Mel, trouxe toda a doçura e magia que o Ursinho Pooh tanto ama.</p>
+                        
+                        <p>Agora, no seu primeiro aniversário, queremos celebrar com todos os amigos e familiares esta data tão especial. Venha fazer parte desta aventura mágica!</p>
+                        
+                        <div class="highlight-box">
+                            <i class="fas fa-heart"></i>
+                            <p><strong>Especial:</strong> Como moramos em Portugal, esta festa no Brasil será um momento único para reunirmos a familia e os amigos. Celebraremos em "A Casa com Jardim", um local perfeito para nossa pequena guardiã brincar com segurança!</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <div class="photo-placeholder">
+                        <i class="fas fa-camera"></i>
+                        <p>Foto da Mel<br><small>Adicione sua foto aqui</small></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Info Section -->
+    <section id="info" class="info">
+        <div class="container">
+            <div class="section-header">
+                <h2>Informações da Festa</h2>
+                <p>Todos os detalhes para você não perder nada!</p>
+            </div>
+            <div class="info-grid">
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <h3>Data e Horário</h3>
+                    <p><strong>Data:</strong> Sábado, 14/12/2025</p>
+                    <p><strong>Horário:</strong> 15h às 18h</p>
+                    <button class="map-button" onclick="addToCalendar()"><i class="fas fa-calendar-plus"></i> Adicionar ao Calendário</button>
+                    <p class="note">Não esqueça! 🎉</p>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h3>Local</h3>
+                    <p><strong>Local:</strong> A Casa com Jardim</p>
+                    <p><strong>Endereço:</strong><br>R. Visc. de Barbacena, 370 - Várzea</p>
+                    <p><strong>Cidade:</strong> Recife - PE, Brasil</p>
+                    <button class="map-button" onclick="openMap()"><i class="fas fa-map-marked-alt"></i> Ver no Mapa</button>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fas fa-tshirt"></i>
+                    </div>
+                    <h3>Dress Code</h3>
+                    <p><strong>Tema:</strong> Bosque Encantado do Pooh</p>
+                    <p>Cores sugeridas: dourado, amarelo, verde floresta e tons terrosos</p>
+                    <p class="note">Venha como personagem! 🧸</p>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <h3>Comida e Bebida</h3>
+                    <p>Buffet completo inspirado no tema</p>
+                    <p><strong>Especiais:</strong> Mel, bolos temáticos e muito mais!</p>
+                    <p class="note">Para todas as idades</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gifts Section -->
+    <section id="gifts" class="gifts">
+        <div class="container">
+            <div class="section-header">
+                <h2>Lista de Presentes</h2>
+                <p>Sua colaboração é muito importante para nós!</p>
+            </div>
+            
+            <div class="gifts-intro">
+                <div class="travel-info">
+                    <i class="fas fa-plane"></i>
+                    <p><strong>Informação Importante:</strong> Como viajamos de Portugal para o Brasil, temos limitações de bagagem. Por isso, organizamos os presentes em categorias especiais!</p>
+                </div>
+            </div>
+
+            <div class="gifts-categories">
+                <div class="gift-category">
+                    <div class="category-header">
+                        <i class="fas fa-suitcase"></i>
+                        <h3>Levar na Bagagem</h3>
+                        <p>Presentes pequenos e leves que podemos trazer para Portugal</p>
+                    </div>
+                    <div class="gift-list">
+                        <div class="gift-item">
+                            <span class="gift-name">Livros infantis</span>
+                            <button class="gift-button">Escolher</button>
+                        </div>
+                        <div class="gift-item">
+                            <span class="gift-name">Roupinhas 12-18 meses</span>
+                            <button class="gift-button">Escolher</button>
+                        </div>
+                        <div class="gift-item">
+                            <span class="gift-name">Brinquedos pequenos</span>
+                            <button class="gift-button">Escolher</button>
+                        </div>
+                        <div class="gift-item">
+                            <span class="gift-name">Acessórios para cabelo</span>
+                            <button class="gift-button">Escolher</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gift-category">
+                    <div class="category-header">
+                        <i class="fas fa-home"></i>
+                        <h3>Usar no Brasil</h3>
+                        <p>Presentes para aproveitar durante nossa estadia</p>
+                    </div>
+                    <div class="gift-list">
+                        <div class="gift-item">
+                            <span class="gift-name">Brinquedos grandes</span>
+                            <button class="gift-button">Escolher</button>
+                        </div>
+                        <div class="gift-item">
+                            <span class="gift-name">Bichinhos de pelúcia</span>
+                            <button class="gift-button">Escolher</button>
+                        </div>
+                        <div class="gift-item">
+                            <span class="gift-name">Itens para praia/piscina</span>
+                            <button class="gift-button">Escolher</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gift-category">
+                    <div class="category-header">
+                        <i class="fas fa-shipping-fast"></i>
+                        <h3>Enviar por Correio</h3>
+                        <p>Para envio posterior para Portugal</p>
+                    </div>
+                    <div class="gift-list">
+                        <div class="gift-item">
+                            <span class="gift-name">Produtos brasileiros especiais</span>
+                            <button class="gift-button">Escolher</button>
+                        </div>
+                        <div class="gift-item">
+                            <span class="gift-name">Lembranças familiares</span>
+                            <button class="gift-button">Escolher</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gift-category">
+                    <div class="category-header">
+                        <i class="fas fa-piggy-bank"></i>
+                        <h3>Contribuição</h3>
+                        <p>Para o futuro da nossa pequena guardiã</p>
+                    </div>
+                    <div class="gift-list">
+                        <div class="gift-item">
+                            <span class="gift-name">PIX: gabrielibson@gmail.com</span>
+                            <button class="gift-button copy-pix">Copiar PIX</button>
+                        </div>
+                        <div class="gift-item">
+                            <span class="gift-name">Mercado Pago (Cartão/PIX)</span>
+                            <button class="gift-button mercado-pago-btn">Contribuir Online</button>
+                        </div>
+                        <div class="gift-item">
+                            <span class="gift-name">Transferência Bancária</span>
+                            <button class="gift-button bank-transfer-btn">Ver Dados</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="gallery">
+        <div class="container">
+            <div class="section-header">
+                <h2>Galeria da Mel</h2>
+                <p>Momentos especiais da nossa pequena guardiã</p>
+            </div>
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <div class="photo-placeholder">
+                        <i class="fas fa-camera"></i>
+                        <p>Primeira foto</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="photo-placeholder">
+                        <i class="fas fa-video"></i>
+                        <p>Primeiro vídeo</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="photo-placeholder">
+                        <i class="fas fa-camera"></i>
+                        <p>Momentos especiais</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="photo-placeholder">
+                        <i class="fas fa-camera"></i>
+                        <p>Com a família</p>
+                    </div>
+                </div>
+            </div>
+            <div class="upload-section">
+                <p><strong>Quer adicionar fotos ou vídeos?</strong> Entre em contato conosco!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- RSVP Section -->
+    <section id="rsvp" class="rsvp">
+        <div class="container">
+            <div class="section-header">
+                <h2>Confirme sua Presença</h2>
+                <p>Precisamos saber quem estará conosco neste dia especial!</p>
+            </div>
+            <div class="rsvp-form">
+                <form id="rsvpForm">
+                    <div class="form-group">
+                        <label for="name">Nome Completo *</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="adults">Número de Adultos *</label>
+                        <select id="adults" name="adults" required>
+                            <option value="">Selecione</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5+">5 ou mais</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="children">Número de Crianças</label>
+                        <select id="children" name="children">
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4+">4 ou mais</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="dietary">Restrições Alimentares</label>
+                        <textarea id="dietary" name="dietary" placeholder="Descreva aqui qualquer restrição alimentar ou alergia"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Mensagem para a Mel</label>
+                        <textarea id="message" name="message" placeholder="Deixe uma mensagem carinhosa para nossa pequena guardiã!"></textarea>
+                    </div>
+                    <button type="submit" class="submit-button">
+                        <i class="fas fa-heart"></i>
+                        Confirmar Presença
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Contato</h3>
+                    <p><i class="fas fa-whatsapp"></i> +351 914070020</p>
+                    <p><i class="fas fa-envelope"></i> gabrielibson@gmail.com</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Redes Sociais</h3>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>1º Aniversário</h3>
+                    <p>Melissa - Guardiã do Bosque Encantado</p>
+                    <p>🍯 Feito com muito amor</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 - Aniversário da Mel. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Character Side Decorations -->
+    <div class="character-decorations">
+        <!-- Left Side Characters -->
+        <img src="img/pooh-lateral.png" alt="Pooh" class="character-img pooh-left">
+        <img src="img/tigrao-lateral.png" alt="Tigrão" class="character-img tigger-left">
+        
+        <!-- Right Side Characters -->  
+        <img src="img/leitao-lateral.png" alt="Leitão" class="character-img piglet-right">
+        <img src="img/bisonho-lateral.png" alt="Bisonho" class="character-img eeyore-right">
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
