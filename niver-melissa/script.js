@@ -306,16 +306,8 @@ class GiftManager {
 // RSVP Form Management
 class RSVPManager {
     constructor() {
-        // Google Forms configuration
-        this.googleFormURL = 'https://docs.google.com/forms/d/e/1FAIpQLScjGhBW28pWZaywITtF3d2qIPArXBgzVJGvlsqj6JzVKePY2Q/formResponse';
-        this.fieldIDs = {
-            email: 'entry.1091219066',
-            name: 'entry.1843674912',
-            phone: 'entry.2126909386',
-            adults: 'entry.275358839',
-            children: 'entry.1742094538',
-            dietary: 'entry.707865286'
-        };
+        // Google Apps Script URL (intermediário para o Google Forms)
+        this.appsScriptURL = 'https://script.google.com/macros/s/AKfycbyKSoQ8A4eBXDIHq7ltlL3wgip7hVRIgGmYdtqhiofISQdyVcDcLnwTTSwVvzL0aEI8/exec';
         this.initForm();
     }
 
@@ -368,28 +360,28 @@ class RSVPManager {
     }
 
     async sendToGoogleForms(data) {
-        // Use fetch with no-cors mode
-        // Note: We won't get a response due to CORS, but the submission will work
-        const formData = new FormData();
-        formData.append(this.fieldIDs.name, data.name);
-        formData.append(this.fieldIDs.email, data.email || '');
-        formData.append(this.fieldIDs.phone, data.phone || '');
-        formData.append(this.fieldIDs.adults, data.adults);
-        formData.append(this.fieldIDs.children, data.children);
-        formData.append(this.fieldIDs.dietary, data.dietary || '');
-
         try {
-            // Submit to Google Forms
-            await fetch(this.googleFormURL, {
+            // Enviar dados para o Google Apps Script
+            await fetch(this.appsScriptURL, {
                 method: 'POST',
-                body: formData,
-                mode: 'no-cors' // This prevents CORS errors but we won't get response
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: data.name,
+                    email: data.email || '',
+                    phone: data.phone || '',
+                    adults: data.adults,
+                    children: data.children,
+                    dietary: data.dietary || ''
+                }),
+                mode: 'no-cors' // Apps Script requer no-cors
             });
 
-            console.log('Dados enviados para Google Forms');
+            console.log('Dados enviados para Google Forms via Apps Script');
 
             // Wait to ensure submission completes
-            await new Promise(resolve => setTimeout(resolve, 800));
+            await new Promise(resolve => setTimeout(resolve, 500));
 
         } catch (error) {
             console.error('Erro ao enviar:', error);
