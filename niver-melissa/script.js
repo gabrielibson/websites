@@ -306,6 +306,16 @@ class GiftManager {
 // RSVP Form Management
 class RSVPManager {
     constructor() {
+        // Google Forms configuration
+        this.googleFormURL = 'https://docs.google.com/forms/d/e/1FAIpQLScjGhBW28pWZaywITtF3d2qIPArXBgzVJGvlsqj6JzVKePY2Q/formResponse';
+        this.fieldIDs = {
+            email: 'entry.1091219066',
+            name: 'entry.1843674912',
+            phone: 'entry.2126909386',
+            adults: 'entry.275358839',
+            children: 'entry.1742094538',
+            dietary: 'entry.707865286'
+        };
         this.initForm();
     }
 
@@ -316,23 +326,102 @@ class RSVPManager {
         }
     }
 
-    handleSubmit(e) {
+    async handleSubmit(e) {
         e.preventDefault();
-        
+
         const formData = new FormData(e.target);
         const data = {
             name: formData.get('name'),
+            email: formData.get('email'),
+            phone: formData.get('phone'),
             adults: formData.get('adults'),
             children: formData.get('children'),
             dietary: formData.get('dietary'),
-            message: formData.get('message'),
             submittedAt: new Date().toISOString()
         };
 
-        // Here you would typically send to a server
-        // For now, we'll store locally and show confirmation
-        this.saveRSVP(data);
-        this.showConfirmation(data);
+        // Show loading state
+        const submitButton = e.target.querySelector('button[type="submit"]');
+        const originalButtonText = submitButton.textContent;
+        submitButton.textContent = 'Enviando...';
+        submitButton.disabled = true;
+
+        try {
+            // Send to Google Forms
+            await this.sendToGoogleForms(data);
+
+            // Also save locally as backup
+            this.saveRSVP(data);
+
+            // Show success confirmation
+            this.showConfirmation(data);
+        } catch (error) {
+            console.error('Erro ao enviar confirmação:', error);
+            // Even if Google Forms fails, save locally and show confirmation
+            this.saveRSVP(data);
+            this.showConfirmation(data, true); // true = show warning about possible error
+        } finally {
+            // Reset button
+            submitButton.textContent = originalButtonText;
+            submitButton.disabled = false;
+        }
+    }
+
+    async sendToGoogleForms(data) {
+        // Create a hidden iframe to submit the form
+        const iframe = document.createElement('iframe');
+        iframe.name = 'hidden_iframe';
+        iframe.id = 'hidden_iframe';
+        iframe.style.display = 'none';
+
+        // Handle iframe load to know when submission completes
+        iframe.onload = function() {
+            console.log('Formulário enviado com sucesso!');
+        };
+
+        document.body.appendChild(iframe);
+
+        // Create a temporary form
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = this.googleFormURL;
+        form.target = 'hidden_iframe';
+
+        // Add form fields
+        const fields = {
+            [this.fieldIDs.name]: data.name,
+            [this.fieldIDs.email]: data.email || '',
+            [this.fieldIDs.phone]: data.phone || '',
+            [this.fieldIDs.adults]: data.adults,
+            [this.fieldIDs.children]: data.children,
+            [this.fieldIDs.dietary]: data.dietary || ''
+        };
+
+        Object.entries(fields).forEach(([name, value]) => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = name;
+            input.value = value;
+            form.appendChild(input);
+        });
+
+        // Append form to body and submit
+        document.body.appendChild(form);
+        console.log('Enviando para Google Forms...');
+        form.submit();
+
+        // Clean up after submission
+        setTimeout(() => {
+            if (document.body.contains(form)) {
+                document.body.removeChild(form);
+            }
+            if (document.body.contains(iframe)) {
+                document.body.removeChild(iframe);
+            }
+        }, 2000);
+
+        // Wait a moment before continuing
+        await new Promise(resolve => setTimeout(resolve, 1000));
     }
 
     saveRSVP(data) {
@@ -341,7 +430,7 @@ class RSVPManager {
         localStorage.setItem('rsvps', JSON.stringify(existingRSVPs));
     }
 
-    showConfirmation(data) {
+    showConfirmation(data, hasError = false) {
         const modal = document.createElement('div');
         modal.className = 'confirmation-modal';
         modal.innerHTML = `
@@ -351,13 +440,13 @@ class RSVPManager {
                     <h2>Obrigado, ${data.name}!</h2>
                 </div>
                 <div class="confirmation-body">
-                    <p>Sua confirmação foi recebida com muito carinho!</p>
+                    <p>Sua confirmação foi enviada com muito carinho!</p>
+                    ${hasError ? '<p class="warning-text"><small>⚠️ Houve um problema ao enviar. Por favor, confirme pelo WhatsApp para garantir.</small></p>' : '<p class="success-text">✓ Confirmação registrada com sucesso!</p>'}
                     <div class="confirmation-details">
                         <p><strong>Adultos:</strong> ${data.adults}</p>
                         <p><strong>Crianças:</strong> ${data.children}</p>
                         ${data.dietary ? `<p><strong>Restrições:</strong> ${data.dietary}</p>` : ''}
                     </div>
-                    ${data.message ? `<div class="message-preview"><p><em>"${data.message}"</em></p></div>` : ''}
                     <p class="celebration-text">Mal podemos esperar para celebrar com vocês! 🎉</p>
                 </div>
                 <button class="close-confirmation" onclick="this.parentElement.parentElement.remove()">
@@ -681,6 +770,36 @@ style.textContent = `
         font-weight: 600;
         font-size: 1.1rem;
         margin-top: 20px;
+    }
+
+    .warning-text {
+        color: #F4A259;
+        font-size: 0.9rem;
+        margin: 10px 0;
+        padding: 10px;
+        background: rgba(244, 162, 89, 0.1);
+        border-radius: 8px;
+        border-left: 3px solid #F4A259;
+    }
+
+    .instruction-text {
+        color: #2A9D8F;
+        font-size: 1rem;
+        margin: 15px 0;
+        padding: 15px;
+        background: rgba(42, 157, 143, 0.1);
+        border-radius: 8px;
+        border-left: 3px solid #2A9D8F;
+    }
+
+    .success-text {
+        color: #2A9D8F;
+        font-size: 1rem;
+        font-weight: 600;
+        margin: 15px 0;
+        padding: 12px;
+        background: rgba(42, 157, 143, 0.15);
+        border-radius: 8px;
     }
 
     .close-confirmation {
