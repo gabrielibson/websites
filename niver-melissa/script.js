@@ -368,60 +368,33 @@ class RSVPManager {
     }
 
     async sendToGoogleForms(data) {
-        // Create a hidden iframe to submit the form
-        const iframe = document.createElement('iframe');
-        iframe.name = 'hidden_iframe';
-        iframe.id = 'hidden_iframe';
-        iframe.style.display = 'none';
+        // Use fetch with no-cors mode
+        // Note: We won't get a response due to CORS, but the submission will work
+        const formData = new FormData();
+        formData.append(this.fieldIDs.name, data.name);
+        formData.append(this.fieldIDs.email, data.email || '');
+        formData.append(this.fieldIDs.phone, data.phone || '');
+        formData.append(this.fieldIDs.adults, data.adults);
+        formData.append(this.fieldIDs.children, data.children);
+        formData.append(this.fieldIDs.dietary, data.dietary || '');
 
-        // Handle iframe load to know when submission completes
-        iframe.onload = function() {
-            console.log('Formulário enviado com sucesso!');
-        };
+        try {
+            // Submit to Google Forms
+            await fetch(this.googleFormURL, {
+                method: 'POST',
+                body: formData,
+                mode: 'no-cors' // This prevents CORS errors but we won't get response
+            });
 
-        document.body.appendChild(iframe);
+            console.log('Dados enviados para Google Forms');
 
-        // Create a temporary form
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = this.googleFormURL;
-        form.target = 'hidden_iframe';
+            // Wait to ensure submission completes
+            await new Promise(resolve => setTimeout(resolve, 800));
 
-        // Add form fields
-        const fields = {
-            [this.fieldIDs.name]: data.name,
-            [this.fieldIDs.email]: data.email || '',
-            [this.fieldIDs.phone]: data.phone || '',
-            [this.fieldIDs.adults]: data.adults,
-            [this.fieldIDs.children]: data.children,
-            [this.fieldIDs.dietary]: data.dietary || ''
-        };
-
-        Object.entries(fields).forEach(([name, value]) => {
-            const input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = name;
-            input.value = value;
-            form.appendChild(input);
-        });
-
-        // Append form to body and submit
-        document.body.appendChild(form);
-        console.log('Enviando para Google Forms...');
-        form.submit();
-
-        // Clean up after submission
-        setTimeout(() => {
-            if (document.body.contains(form)) {
-                document.body.removeChild(form);
-            }
-            if (document.body.contains(iframe)) {
-                document.body.removeChild(iframe);
-            }
-        }, 2000);
-
-        // Wait a moment before continuing
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        } catch (error) {
+            console.error('Erro ao enviar:', error);
+            throw error;
+        }
     }
 
     saveRSVP(data) {
