@@ -306,6 +306,8 @@ class GiftManager {
 // RSVP Form Management
 class RSVPManager {
     constructor() {
+        // Google Apps Script URL (intermediário para o Google Forms)
+        this.appsScriptURL = 'https://script.google.com/macros/s/AKfycbyKSoQ8A4eBXDIHq7ltlL3wgip7hVRIgGmYdtqhiofISQdyVcDcLnwTTSwVvzL0aEI8/exec';
         this.initForm();
     }
 
@@ -316,12 +318,14 @@ class RSVPManager {
         }
     }
 
-    handleSubmit(e) {
+    async handleSubmit(e) {
         e.preventDefault();
-        
+
         const formData = new FormData(e.target);
         const data = {
             name: formData.get('name'),
+            email: formData.get('email'),
+            phone: formData.get('phone'),
             adults: formData.get('adults'),
             children: formData.get('children'),
             dietary: formData.get('dietary'),
@@ -329,10 +333,62 @@ class RSVPManager {
             submittedAt: new Date().toISOString()
         };
 
-        // Here you would typically send to a server
-        // For now, we'll store locally and show confirmation
-        this.saveRSVP(data);
-        this.showConfirmation(data);
+        // Show loading state
+        const submitButton = e.target.querySelector('button[type="submit"]');
+        const originalButtonText = submitButton.textContent;
+        submitButton.textContent = 'Enviando...';
+        submitButton.disabled = true;
+
+        try {
+            // Send to Google Forms
+            await this.sendToGoogleForms(data);
+
+            // Also save locally as backup
+            this.saveRSVP(data);
+
+            // Show success confirmation
+            this.showConfirmation(data);
+        } catch (error) {
+            console.error('Erro ao enviar confirmação:', error);
+            // Even if Google Forms fails, save locally and show confirmation
+            this.saveRSVP(data);
+            this.showConfirmation(data, true); // true = show warning about possible error
+        } finally {
+            // Reset button
+            submitButton.textContent = originalButtonText;
+            submitButton.disabled = false;
+        }
+    }
+
+    async sendToGoogleForms(data) {
+        try {
+            // Enviar dados para o Google Apps Script
+            await fetch(this.appsScriptURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: data.name,
+                    email: data.email || '',
+                    phone: data.phone || '',
+                    adults: data.adults,
+                    children: data.children,
+                    dietary: data.dietary || '',
+                    message: data.message || ''
+                }),
+                mode: 'no-cors'
+            });
+
+            console.log('Dados enviados para Google Forms via Apps Script');
+
+            // Wait to ensure submission completes
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+        } catch (error) {
+            console.error('Erro ao enviar:', error);
+            throw error;
+        }
     }
 
     saveRSVP(data) {
@@ -341,7 +397,7 @@ class RSVPManager {
         localStorage.setItem('rsvps', JSON.stringify(existingRSVPs));
     }
 
-    showConfirmation(data) {
+    showConfirmation(data, hasError = false) {
         const modal = document.createElement('div');
         modal.className = 'confirmation-modal';
         modal.innerHTML = `
@@ -351,13 +407,13 @@ class RSVPManager {
                     <h2>Obrigado, ${data.name}!</h2>
                 </div>
                 <div class="confirmation-body">
-                    <p>Sua confirmação foi recebida com muito carinho!</p>
+                    <p>Sua confirmação foi enviada com muito carinho!</p>
+                    ${hasError ? '<p class="warning-text"><small>⚠️ Houve um problema ao enviar. Por favor, confirme pelo WhatsApp para garantir.</small></p>' : '<p class="success-text">✓ Confirmação registrada com sucesso!</p>'}
                     <div class="confirmation-details">
                         <p><strong>Adultos:</strong> ${data.adults}</p>
                         <p><strong>Crianças:</strong> ${data.children}</p>
                         ${data.dietary ? `<p><strong>Restrições:</strong> ${data.dietary}</p>` : ''}
                     </div>
-                    ${data.message ? `<div class="message-preview"><p><em>"${data.message}"</em></p></div>` : ''}
                     <p class="celebration-text">Mal podemos esperar para celebrar com vocês! 🎉</p>
                 </div>
                 <button class="close-confirmation" onclick="this.parentElement.parentElement.remove()">
@@ -681,6 +737,36 @@ style.textContent = `
         font-weight: 600;
         font-size: 1.1rem;
         margin-top: 20px;
+    }
+
+    .warning-text {
+        color: #F4A259;
+        font-size: 0.9rem;
+        margin: 10px 0;
+        padding: 10px;
+        background: rgba(244, 162, 89, 0.1);
+        border-radius: 8px;
+        border-left: 3px solid #F4A259;
+    }
+
+    .instruction-text {
+        color: #2A9D8F;
+        font-size: 1rem;
+        margin: 15px 0;
+        padding: 15px;
+        background: rgba(42, 157, 143, 0.1);
+        border-radius: 8px;
+        border-left: 3px solid #2A9D8F;
+    }
+
+    .success-text {
+        color: #2A9D8F;
+        font-size: 1rem;
+        font-weight: 600;
+        margin: 15px 0;
+        padding: 12px;
+        background: rgba(42, 157, 143, 0.15);
+        border-radius: 8px;
     }
 
     .close-confirmation {
