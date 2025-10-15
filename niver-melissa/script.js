@@ -315,6 +315,35 @@ class RSVPManager {
         const form = document.getElementById('rsvpForm');
         if (form) {
             form.addEventListener('submit', (e) => this.handleSubmit(e));
+
+            // Adicionar formatação automática de telefone
+            const phoneInput = document.getElementById('phone');
+            if (phoneInput) {
+                phoneInput.addEventListener('input', this.formatPhone.bind(this));
+            }
+        }
+    }
+
+    formatPhone(e) {
+        let value = e.target.value.replace(/\D/g, ''); // Remove tudo que não é número
+
+        // Limitar a 13 dígitos (55 + 11 + 9 dígitos)
+        if (value.length > 13) {
+            value = value.substring(0, 13);
+        }
+
+        // Formatar conforme o tamanho
+        if (value.length <= 2) {
+            e.target.value = value;
+        } else if (value.length <= 4) {
+            // +55 11
+            e.target.value = `+${value.substring(0, 2)} ${value.substring(2)}`;
+        } else if (value.length <= 9) {
+            // +55 11 9999
+            e.target.value = `+${value.substring(0, 2)} ${value.substring(2, 4)} ${value.substring(4)}`;
+        } else {
+            // +55 11 99999-9999
+            e.target.value = `+${value.substring(0, 2)} ${value.substring(2, 4)} ${value.substring(4, 9)}-${value.substring(9)}`;
         }
     }
 
