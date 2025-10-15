@@ -377,7 +377,7 @@ class RSVPManager {
                     dietary: data.dietary || '',
                     message: data.message || ''
                 }),
-                mode: 'no-cors' // Apps Script requer no-cors
+                mode: 'no-cors'
             });
 
             console.log('Dados enviados para Google Forms via Apps Script');
