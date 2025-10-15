@@ -329,6 +329,7 @@ class RSVPManager {
             adults: formData.get('adults'),
             children: formData.get('children'),
             dietary: formData.get('dietary'),
+            message: formData.get('message'),
             submittedAt: new Date().toISOString()
         };
 
@@ -373,7 +374,8 @@ class RSVPManager {
                     phone: data.phone || '',
                     adults: data.adults,
                     children: data.children,
-                    dietary: data.dietary || ''
+                    dietary: data.dietary || '',
+                    message: data.message || ''
                 }),
                 mode: 'no-cors' // Apps Script requer no-cors
             });
