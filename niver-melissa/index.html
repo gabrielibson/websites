@@ -310,7 +310,8 @@
                     </div>
                     <div class="form-group">
                         <label for="phone">Telefone/WhatsApp *</label>
-                        <input type="tel" id="phone" name="phone" required placeholder="+55 11 99999-9999">
+                        <input type="tel" id="phone" name="phone" required placeholder="+55 11 99999-9999" pattern="[\+]?[0-9\s\-\(\)]{10,20}" title="Digite um telefone válido (ex: +55 11 99999-9999 ou 11999999999)">
+                        <small class="field-hint">Formato: +55 11 99999-9999 ou (11) 99999-9999</small>
                     </div>
                     <div class="form-group">
                         <label for="adults">Número de Adultos *</label>
