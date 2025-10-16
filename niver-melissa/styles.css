@@ -1176,4 +1176,403 @@ section {
 
 .contribution-close-btn:hover {
     background: var(--text-dark);
+}/* ==== NOVOS ESTILOS PARA LISTA DE PRESENTES ==== */
+/* Adicione este CSS ao final do arquivo styles.css */
+
+.gift-category-new {
+    margin-bottom: 30px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.category-header-toggle {
+    font-family: 'Bubblegum Sans', cursive;
+    font-size: 1.8rem;
+    color: var(--text-dark);
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    background: linear-gradient(135deg, rgba(255, 184, 77, 0.1) 0%, rgba(244, 200, 66, 0.1) 100%);
+    border: none;
+    width: 100%;
+    transition: all 0.3s ease;
+    border-bottom: 2px solid transparent;
+}
+
+.category-header-toggle:hover {
+    background: linear-gradient(135deg, rgba(255, 184, 77, 0.15) 0%, rgba(244, 200, 66, 0.15) 100%);
+    border-bottom-color: var(--honey-color);
+}
+
+.category-header-toggle.active {
+    border-bottom-color: var(--honey-color);
+}
+
+.category-title-content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.category-title-content i {
+    color: var(--honey-color);
+    font-size: 2rem;
+}
+
+.category-item-count {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    font-weight: 400;
+    margin-left: 10px;
+}
+
+.category-toggle-icon {
+    font-size: 1.5rem;
+    color: var(--honey-color);
+    transition: transform 0.3s ease;
+}
+
+.category-toggle-icon.rotated {
+    transform: rotate(180deg);
+}
+
+.category-title {
+    font-family: 'Bubblegum Sans', cursive;
+    font-size: 2rem;
+    color: var(--text-dark);
+    text-align: center;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.category-title i {
+    color: var(--honey-color);
+    font-size: 2.2rem;
+}
+
+.category-note {
+    text-align: center;
+    color: var(--text-light);
+    max-width: 800px;
+    margin: 0 auto 30px;
+    padding: 15px;
+    background: rgba(255, 184, 77, 0.1);
+    border-radius: 10px;
+    border-left: 4px solid var(--honey-color);
+}
+
+.category-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease;
+    padding: 0 25px;
+}
+
+.category-content.active {
+    max-height: 5000px;
+    padding: 25px;
+}
+
+.gift-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 25px;
+    margin-top: 0;
+}
+
+.gift-card {
+    background: white;
+    border-radius: 20px;
+    padding: 30px 20px;
+    text-align: center;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    border: 3px solid rgba(255, 184, 77, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.gift-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, var(--honey-color), var(--secondary-color));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.gift-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    border-color: var(--honey-color);
+}
+
+.gift-card:hover::before {
+    opacity: 1;
+}
+
+.gift-icon {
+    font-size: 4rem;
+    margin-bottom: 15px;
+    animation: float 3s ease-in-out infinite;
+}
+
+.gift-card h4 {
+    font-family: 'Bubblegum Sans', cursive;
+    font-size: 1.3rem;
+    color: var(--text-dark);
+    margin: 15px 0 10px;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.gift-price {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--forest-green);
+    margin: 10px 0;
+}
+
+.gift-contributions {
+    margin: 15px 0;
+    padding: 10px;
+    background: rgba(42, 157, 143, 0.1);
+    border-radius: 10px;
+}
+
+.contributions-count {
+    font-size: 0.9rem;
+    color: var(--forest-green);
+    font-weight: 600;
+}
+
+.gift-description {
+    color: var(--text-light);
+    font-size: 0.95rem;
+    margin: 10px 0;
+    line-height: 1.5;
+}
+
+.gift-btn {
+    width: 100%;
+    background: linear-gradient(135deg, var(--honey-color) 0%, var(--secondary-color) 100%);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 15px;
+    box-shadow: 0 4px 15px rgba(255, 184, 77, 0.3);
+}
+
+.gift-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(255, 184, 77, 0.4);
+}
+
+.gift-btn:active {
+    transform: scale(0.98);
+}
+
+/* Cards especiais */
+.gift-card.special-gift,
+.gift-card.free-contribution {
+    background: linear-gradient(135deg, rgba(255, 184, 77, 0.1) 0%, rgba(244, 200, 66, 0.1) 100%);
+    border-color: var(--honey-color);
+}
+
+.gift-card.special-gift .gift-icon,
+.gift-card.free-contribution .gift-icon {
+    font-size: 5rem;
+}
+
+/* Modal de Pagamento */
+.payment-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.payment-content {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+    position: relative;
+    animation: slideInUp 0.3s ease-out;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.payment-header {
+    margin-bottom: 25px;
+}
+
+.payment-header .gift-icon {
+    font-size: 4rem;
+    margin-bottom: 10px;
+}
+
+.payment-header h2 {
+    font-family: 'Bubblegum Sans', cursive;
+    color: var(--text-dark);
+    margin: 10px 0;
+    font-size: 1.8rem;
+}
+
+.payment-header .price {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--forest-green);
+    margin: 10px 0;
+}
+
+.payment-options {
+    margin: 30px 0;
+}
+
+.payment-option {
+    background: rgba(255, 184, 77, 0.1);
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    border: 2px solid rgba(255, 184, 77, 0.3);
+}
+
+.payment-option h3 {
+    color: var(--text-dark);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.pix-key {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    font-family: monospace;
+    font-size: 1.1rem;
+    color: var(--text-dark);
+    margin: 10px 0;
+    word-break: break-all;
+}
+
+.copy-pix-btn {
+    background: var(--forest-green);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.copy-pix-btn:hover {
+    transform: scale(1.05);
+    background: #238276;
+}
+
+.contributor-form {
+    margin: 20px 0;
+    text-align: left;
+}
+
+.contributor-form input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid rgba(255, 184, 77, 0.3);
+    border-radius: 10px;
+    font-size: 1rem;
+    margin-bottom: 15px;
+}
+
+.contributor-form input:focus {
+    outline: none;
+    border-color: var(--honey-color);
+}
+
+.confirm-contribution-btn {
+    width: 100%;
+    background: linear-gradient(135deg, var(--honey-color) 0%, var(--secondary-color) 100%);
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 25px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.close-modal-btn {
+    background: #ddd;
+    color: var(--text-dark);
+    border: none;
+    padding: 12px 25px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-top: 15px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .gift-cards-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+    }
+
+    .category-title {
+        font-size: 1.6rem;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .gift-card h4 {
+        font-size: 1.1rem;
+        min-height: auto;
+    }
+
+    .gift-price {
+        font-size: 1.5rem;
+    }
+
+    .payment-content {
+        padding: 30px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .gift-cards-grid {
+        grid-template-columns: 1fr;
+    }
 }

@@ -66,242 +66,399 @@ window.addEventListener('scroll', () => {
     });
 });
 
-// Gift selection functionality
-class GiftManager {
+// Dados dos presentes
+const GIFTS_DATA = {
+    "Aprendizagem e Desenvolvimento Motor": {
+        icon: "fas fa-brain",
+        items: [
+            { name: "Brinquedo de encaixe", price: 90, emoji: "🧩" },
+            { name: "Torre de anéis", price: 60, emoji: "🎯" },
+            { name: "Blocos de montar", price: 120, emoji: "🧱" },
+            { name: "Mesa de atividades", price: 250, emoji: "🎨" },
+            { name: "Quebra-cabeça de madeira", price: 80, emoji: "🪵" },
+            { name: "Brinquedo de puxar", price: 70, emoji: "🚂" }
+        ]
+    },
+    "Cavalgáveis e Andadores": {
+        icon: "fas fa-horse",
+        items: [
+            { name: "Andador educativo", price: 280, emoji: "🚶" },
+            { name: "Cavalinho de balanço", price: 220, emoji: "🐴" },
+            { name: "Triciclo com empurrador", price: 350, emoji: "🚲" },
+            { name: "Carrinho de empurrar", price: 150, emoji: "🛒" },
+            { name: "Balanço infantil", price: 200, emoji: "🪀" }
+        ]
+    },
+    "Brinquedos e Livros": {
+        icon: "fas fa-book",
+        items: [
+            { name: "Livrinhos infantis (kit 5)", price: 100, emoji: "📚" },
+            { name: "Livros de pano/plástico", price: 60, emoji: "📖" },
+            { name: "Brinquedo musical", price: 130, emoji: "🎹" },
+            { name: "Bonecos/Pelúcias", price: 90, emoji: "🧸" },
+            { name: "Brinquedos para banho", price: 50, emoji: "🛁" },
+            { name: "Massinha de modelar", price: 45, emoji: "🎨" }
+        ]
+    },
+    "Vestuário (18-24 meses)": {
+        icon: "fas fa-tshirt",
+        items: [
+            { name: "Conjunto de roupas", price: 150, emoji: "👗" },
+            { name: "Sapatinhos (18-21)", price: 80, emoji: "👟" },
+            { name: "Vestidos/Conjuntos", price: 120, emoji: "👚" },
+            { name: "Casaco/Agasalho", price: 100, emoji: "🧥" },
+            { name: "Pijamas (kit 2)", price: 90, emoji: "🌙" }
+        ]
+    }
+};
+
+const PIX_KEY = "gabrielibson@gmail.com";
+const APPS_SCRIPT_GIFTS_URL = 'https://script.google.com/macros/s/AKfycbyKSoQ8A4eBXDIHq7ltlL3wgip7hVRIgGmYdtqhiofISQdyVcDcLnwTTSwVvzL0aEI8/exec';
+
+// Novo Gift Manager
+class NewGiftManager {
     constructor() {
-        this.selectedGifts = JSON.parse(localStorage.getItem('selectedGifts') || '{}');
-        this.initGiftButtons();
-        this.updateGiftButtons();
+        this.contributions = JSON.parse(localStorage.getItem('giftContributions') || '{}');
+        this.renderGifts();
     }
 
-    initGiftButtons() {
-        document.querySelectorAll('.gift-button').forEach(button => {
-            button.addEventListener('click', (e) => {
-                const giftItem = e.target.closest('.gift-item');
-                const giftName = giftItem.querySelector('.gift-name').textContent.trim();
-                const category = e.target.closest('.gift-category').querySelector('h3').textContent.trim();
-                
-                if (button.classList.contains('copy-pix')) {
-                    this.copyPixToClipboard(giftName);
-                    return;
-                }
-                
-                if (button.classList.contains('mercado-pago-btn')) {
-                    this.openMercadoPago();
-                    return;
-                }
-                
-                if (button.classList.contains('bank-transfer-btn')) {
-                    this.showBankDetails();
-                    return;
-                }
-                
-                this.toggleGift(giftName, category, button);
+    renderGifts() {
+        const container = document.getElementById('gifts-container');
+        if (!container) return;
+
+        let html = '';
+
+        // Renderizar categorias normais com collapse
+        Object.entries(GIFTS_DATA).forEach(([categoryName, categoryData], index) => {
+            const categoryId = `category-${index}`;
+            const itemCount = categoryData.items.length;
+
+            html += `
+                <div class="gift-category-new">
+                    <button class="category-header-toggle" onclick="giftManager.toggleCategory('${categoryId}', this)">
+                        <div class="category-title-content">
+                            <i class="${categoryData.icon}"></i>
+                            <span>${categoryName}<span class="category-item-count">(${itemCount} ${itemCount === 1 ? 'item' : 'itens'})</span></span>
+                        </div>
+                        <i class="fas fa-chevron-down category-toggle-icon"></i>
+                    </button>
+                    <div class="category-content" id="${categoryId}">
+                        <div class="gift-cards-grid">
+            `;
+
+            categoryData.items.forEach(item => {
+                const contributionsCount = this.getContributionsCount(item.name);
+                html += this.createGiftCard(item, contributionsCount);
             });
-        });
-    }
 
-    toggleGift(giftName, category, button) {
-        const giftKey = `${category}-${giftName}`;
-        
-        if (this.selectedGifts[giftKey]) {
-            // Remove gift
-            delete this.selectedGifts[giftKey];
-            button.textContent = 'Escolher';
-            button.style.background = '';
-            this.showNotification(`Presente removido: ${giftName}`, 'info');
-        } else {
-            // Add gift
-            this.selectedGifts[giftKey] = {
-                name: giftName,
-                category: category,
-                selectedBy: 'Usuário', // Could be expanded to include name
-                selectedAt: new Date().toISOString()
-            };
-            button.textContent = 'Escolhido';
-            button.style.background = '#2A9D8F';
-            button.style.color = 'white';
-            this.showNotification(`Presente selecionado: ${giftName}`, 'success');
-        }
-        
-        localStorage.setItem('selectedGifts', JSON.stringify(this.selectedGifts));
-        this.updateGiftButtons();
-    }
-
-    updateGiftButtons() {
-        document.querySelectorAll('.gift-button').forEach(button => {
-            if (button.classList.contains('copy-pix')) return;
-            
-            const giftItem = button.closest('.gift-item');
-            const giftName = giftItem.querySelector('.gift-name').textContent.trim();
-            const category = button.closest('.gift-category').querySelector('h3').textContent.trim();
-            const giftKey = `${category}-${giftName}`;
-            
-            if (this.selectedGifts[giftKey]) {
-                button.textContent = 'Escolhido';
-                button.style.background = '#2A9D8F';
-                button.style.color = 'white';
-            } else {
-                button.textContent = 'Escolher';
-                button.style.background = '';
-                button.style.color = '';
-            }
-        });
-    }
-
-    copyPixToClipboard(pixKey) {
-        // Extract PIX key from the text (remove "PIX: " prefix)
-        const cleanPixKey = pixKey.replace('PIX: ', '');
-        
-        navigator.clipboard.writeText(cleanPixKey).then(() => {
-            this.showNotification('Chave PIX copiada! 📋', 'success');
-        }).catch(() => {
-            // Fallback for older browsers
-            const textArea = document.createElement('textarea');
-            textArea.value = cleanPixKey;
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textArea);
-            this.showNotification('Chave PIX copiada! 📋', 'success');
-        });
-    }
-
-    openMercadoPago() {
-        // Placeholder - você precisará substituir pela sua URL do Mercado Pago
-        const mercadoPagoLink = 'https://link.mercadopago.com.br/melissaaniversario';
-        
-        // Por enquanto, mostra um modal com instruções
-        this.showContributionModal('mercadopago', {
-            title: 'Contribuição via Mercado Pago',
-            message: 'Para configurar o link do Mercado Pago:<br><br>1. Acesse mercadopago.com.br<br>2. Crie um link de cobrança<br>3. Substitua a URL no código<br><br>Por enquanto, use o PIX: gabrielibson@gmail.com',
-            buttonText: 'Entendi'
-        });
-    }
-
-    showBankDetails() {
-        this.showContributionModal('bank', {
-            title: 'Dados para Transferência Bancária',
-            message: `
-                <div class="bank-details">
-                    <p><strong>Favorecido:</strong> Gabriel Ibson de Souza</p>
-                    <p><strong>PIX:</strong> gabrielibson@gmail.com</p>
-                    <br>
-                    <p><em>Dados bancários completos serão adicionados em breve.</em></p>
-                    <br>
-                    <p>Por enquanto, recomendamos usar o PIX para maior praticidade!</p>
+            html += `
+                        </div>
+                    </div>
                 </div>
-            `,
-            buttonText: 'Copiar PIX',
-            action: () => this.copyPixToClipboard('PIX: gabrielibson@gmail.com')
+            `;
         });
-    }
 
-    showContributionModal(type, config) {
-        const modal = document.createElement('div');
-        modal.className = 'contribution-modal';
-        modal.innerHTML = `
-            <div class="contribution-content">
-                <div class="contribution-header">
-                    <i class="fas fa-heart"></i>
-                    <h2>${config.title}</h2>
-                </div>
-                <div class="contribution-body">
-                    <div class="contribution-message">${config.message}</div>
-                </div>
-                <div class="contribution-actions">
-                    <button class="contribution-action-btn" onclick="this.parentElement.parentElement.parentElement.remove()${config.action ? `; (${config.action.toString()})()` : ''}">
-                        ${config.buttonText}
-                    </button>
-                    <button class="contribution-close-btn" onclick="this.parentElement.parentElement.parentElement.remove()">
-                        Fechar
-                    </button>
+        // Categoria Presentes Personalizados
+        html += `
+            <div class="gift-category-new">
+                <button class="category-header-toggle" onclick="giftManager.toggleCategory('category-special', this)">
+                    <div class="category-title-content">
+                        <i class="fas fa-gift"></i>
+                        <span>Presentes Personalizados</span>
+                    </div>
+                    <i class="fas fa-chevron-down category-toggle-icon"></i>
+                </button>
+                <div class="category-content" id="category-special">
+                    <p class="category-note">💝 Tem um presente especial para a Mel? Conte para nós! Lembre-se: moramos em Portugal e temos limitação de bagagem. Itens pequenos e leves são mais fáceis de transportar.</p>
+                    <div class="gift-cards-grid">
+                        <div class="gift-card special-gift">
+                            <div class="gift-icon">💝</div>
+                            <h4>Tenho um presente especial</h4>
+                            <p class="gift-description">Clique para nos contar sobre seu presente</p>
+                            <button class="gift-btn" onclick="giftManager.showSpecialGiftForm()">Informar Presente</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         `;
 
-        // Style the modal
-        Object.assign(modal.style, {
-            position: 'fixed',
-            top: '0',
-            left: '0',
-            width: '100%',
-            height: '100%',
-            background: 'rgba(0,0,0,0.8)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: '10000',
-            animation: 'fadeIn 0.3s ease-out'
-        });
+        // Categoria Poupança da Mel
+        html += `
+            <div class="gift-category-new">
+                <button class="category-header-toggle active" onclick="giftManager.toggleCategory('category-savings', this)">
+                    <div class="category-title-content">
+                        <i class="fas fa-piggy-bank"></i>
+                        <span>Poupança da Mel</span>
+                    </div>
+                    <i class="fas fa-chevron-down category-toggle-icon rotated"></i>
+                </button>
+                <div class="category-content active" id="category-savings">
+                    <div class="gift-cards-grid">
+                        <div class="gift-card free-contribution">
+                            <div class="gift-icon">💰</div>
+                            <h4>Contribuição Livre</h4>
+                            <p class="gift-description">Qualquer valor é bem-vindo!</p>
+                            <button class="gift-btn" onclick="giftManager.showFreeContribution()">Contribuir</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
 
-        const content = modal.querySelector('.contribution-content');
-        Object.assign(content.style, {
-            background: 'white',
-            borderRadius: '20px',
-            padding: '40px',
-            maxWidth: '500px',
-            width: '90%',
-            textAlign: 'center',
-            position: 'relative',
-            animation: 'slideInUp 0.3s ease-out'
-        });
+        container.innerHTML = html;
+    }
+
+    toggleCategory(categoryId, button) {
+        const content = document.getElementById(categoryId);
+        const icon = button.querySelector('.category-toggle-icon');
+
+        content.classList.toggle('active');
+        icon.classList.toggle('rotated');
+        button.classList.toggle('active');
+    }
+
+    createGiftCard(item, contributionsCount) {
+        return `
+            <div class="gift-card" data-gift="${item.name}" data-price="${item.price}">
+                <div class="gift-icon">${item.emoji}</div>
+                <h4>${item.name}</h4>
+                <p class="gift-price">R$ ${item.price.toFixed(2).replace('.', ',')}</p>
+                <div class="gift-contributions">
+                    <span class="contributions-count">${contributionsCount} contribuiç${contributionsCount === 1 ? 'ão' : 'ões'}</span>
+                </div>
+                <button class="gift-btn" onclick="giftManager.showPaymentModal('${item.name}', ${item.price}, '${item.emoji}')">Presentear</button>
+            </div>
+        `;
+    }
+
+    getContributionsCount(giftName) {
+        return this.contributions[giftName]?.length || 0;
+    }
+
+    showPaymentModal(giftName, price, emoji) {
+        const modal = document.createElement('div');
+        modal.className = 'payment-modal';
+        modal.innerHTML = `
+            <div class="payment-content">
+                <div class="payment-header">
+                    <div class="gift-icon">${emoji}</div>
+                    <h2>${giftName}</h2>
+                    <p class="price">R$ ${price.toFixed(2).replace('.', ',')}</p>
+                </div>
+
+                <div class="payment-options">
+                    <div class="payment-option">
+                        <h3><i class="fas fa-qrcode"></i> PIX</h3>
+                        <div class="pix-key">${PIX_KEY}</div>
+                        <button class="copy-pix-btn" onclick="giftManager.copyPix('${PIX_KEY}')">
+                            <i class="fas fa-copy"></i> Copiar Chave PIX
+                        </button>
+                    </div>
+                </div>
+
+                <div class="contributor-form">
+                    <p><strong>Após fazer a transferência, informe seu nome:</strong></p>
+                    <input type="text" id="contributor-name" placeholder="Seu nome completo" required>
+                    <button class="confirm-contribution-btn" onclick="giftManager.confirmContribution('${giftName}', ${price})">
+                        Confirmar Contribuição
+                    </button>
+                </div>
+
+                <button class="close-modal-btn" onclick="this.parentElement.parentElement.remove()">
+                    Fechar
+                </button>
+            </div>
+        `;
 
         document.body.appendChild(modal);
     }
 
-    showNotification(message, type = 'info') {
-        // Remove existing notifications
-        const existingNotifications = document.querySelectorAll('.notification');
-        existingNotifications.forEach(n => n.remove());
+    copyPix(pixKey) {
+        navigator.clipboard.writeText(pixKey).then(() => {
+            alert('✅ Chave PIX copiada!');
+        });
+    }
 
-        // Create notification
-        const notification = document.createElement('div');
-        notification.className = `notification notification-${type}`;
-        notification.innerHTML = `
-            <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-info-circle'}"></i>
-            <span>${message}</span>
+    async confirmContribution(giftName, price) {
+        const nameInput = document.getElementById('contributor-name');
+        const contributorName = nameInput.value.trim();
+
+        if (!contributorName) {
+            alert('Por favor, informe seu nome.');
+            return;
+        }
+
+        // Salvar localmente
+        if (!this.contributions[giftName]) {
+            this.contributions[giftName] = [];
+        }
+
+        const contribution = {
+            contributor: contributorName,
+            price: price,
+            date: new Date().toISOString()
+        };
+
+        this.contributions[giftName].push(contribution);
+        localStorage.setItem('giftContributions', JSON.stringify(this.contributions));
+
+        // Enviar para planilha Google
+        try {
+            await fetch(APPS_SCRIPT_GIFTS_URL, {
+                method: 'POST',
+                body: JSON.stringify({
+                    type: 'gift_contribution',
+                    giftName: giftName,
+                    contributor: contributorName,
+                    amount: price
+                }),
+                mode: 'no-cors'
+            });
+        } catch (error) {
+            console.error('Erro ao enviar contribuição:', error);
+        }
+
+        // Atualizar UI
+        this.renderGifts();
+
+        // Fechar modal e mostrar confirmação
+        document.querySelector('.payment-modal')?.remove();
+        alert(`✅ Obrigado, ${contributorName}! Sua contribuição de R$ ${price.toFixed(2).replace('.', ',')} para "${giftName}" foi registrada!`);
+    }
+
+    showSpecialGiftForm() {
+        const modal = document.createElement('div');
+        modal.className = 'payment-modal';
+        modal.innerHTML = `
+            <div class="payment-content">
+                <div class="payment-header">
+                    <div class="gift-icon">💝</div>
+                    <h2>Presente Personalizado</h2>
+                </div>
+
+                <div class="contributor-form">
+                    <input type="text" id="special-name" placeholder="Seu nome" required>
+                    <input type="email" id="special-email" placeholder="Seu email" required>
+                    <input type="tel" id="special-phone" placeholder="Telefone/WhatsApp">
+                    <textarea id="special-description" placeholder="Descreva seu presente especial..." rows="4" style="width: 100%; padding: 12px; border: 2px solid rgba(255, 184, 77, 0.3); border-radius: 10px; resize: vertical;"></textarea>
+
+                    <button class="confirm-contribution-btn" onclick="giftManager.submitSpecialGift()">
+                        Enviar Informação
+                    </button>
+                </div>
+
+                <button class="close-modal-btn" onclick="this.parentElement.parentElement.remove()">
+                    Cancelar
+                </button>
+            </div>
         `;
 
-        // Style notification
-        Object.assign(notification.style, {
-            position: 'fixed',
-            top: '100px',
-            right: '20px',
-            background: type === 'success' ? '#2A9D8F' : '#F4A259',
-            color: 'white',
-            padding: '15px 20px',
-            borderRadius: '10px',
-            boxShadow: '0 4px 15px rgba(0,0,0,0.2)',
-            zIndex: '10000',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '10px',
-            fontSize: '1rem',
-            fontWeight: '500',
-            animation: 'slideInRight 0.3s ease-out'
-        });
-
-        document.body.appendChild(notification);
-
-        // Remove after 3 seconds
-        setTimeout(() => {
-            notification.style.animation = 'slideOutRight 0.3s ease-out';
-            setTimeout(() => notification.remove(), 300);
-        }, 3000);
+        document.body.appendChild(modal);
     }
 
-    getSelectedGiftsSummary() {
-        const summary = {};
-        Object.values(this.selectedGifts).forEach(gift => {
-            if (!summary[gift.category]) {
-                summary[gift.category] = [];
-            }
-            summary[gift.category].push(gift.name);
-        });
-        return summary;
+    async submitSpecialGift() {
+        const name = document.getElementById('special-name').value.trim();
+        const email = document.getElementById('special-email').value.trim();
+        const phone = document.getElementById('special-phone').value.trim();
+        const description = document.getElementById('special-description').value.trim();
+
+        if (!name || !email || !description) {
+            alert('Por favor, preencha todos os campos obrigatórios.');
+            return;
+        }
+
+        // Enviar para planilha Google
+        try {
+            await fetch(APPS_SCRIPT_GIFTS_URL, {
+                method: 'POST',
+                body: JSON.stringify({
+                    type: 'special_gift',
+                    name: name,
+                    email: email,
+                    phone: phone,
+                    description: description
+                }),
+                mode: 'no-cors'
+            });
+        } catch (error) {
+            console.error('Erro ao enviar:', error);
+        }
+
+        document.querySelector('.payment-modal')?.remove();
+        alert(`✅ Obrigado, ${name}! Recebemos a informação sobre seu presente especial!`);
+    }
+
+    showFreeContribution() {
+        const modal = document.createElement('div');
+        modal.className = 'payment-modal';
+        modal.innerHTML = `
+            <div class="payment-content">
+                <div class="payment-header">
+                    <div class="gift-icon">💰</div>
+                    <h2>Contribuição Livre</h2>
+                    <p>Qualquer valor ajuda a Mel!</p>
+                </div>
+
+                <div class="payment-options">
+                    <div class="payment-option">
+                        <h3><i class="fas fa-qrcode"></i> PIX</h3>
+                        <div class="pix-key">${PIX_KEY}</div>
+                        <button class="copy-pix-btn" onclick="giftManager.copyPix('${PIX_KEY}')">
+                            <i class="fas fa-copy"></i> Copiar Chave PIX
+                        </button>
+                    </div>
+                </div>
+
+                <div class="contributor-form">
+                    <p><strong>Após fazer a transferência:</strong></p>
+                    <input type="text" id="free-contributor-name" placeholder="Seu nome completo" required>
+                    <input type="number" id="free-amount" placeholder="Valor contribuído (R$)" required min="1">
+                    <button class="confirm-contribution-btn" onclick="giftManager.confirmFreeContribution()">
+                        Confirmar Contribuição
+                    </button>
+                </div>
+
+                <button class="close-modal-btn" onclick="this.parentElement.parentElement.remove()">
+                    Fechar
+                </button>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+    }
+
+    async confirmFreeContribution() {
+        const name = document.getElementById('free-contributor-name').value.trim();
+        const amount = parseFloat(document.getElementById('free-amount').value);
+
+        if (!name || !amount || amount <= 0) {
+            alert('Por favor, preencha todos os campos corretamente.');
+            return;
+        }
+
+        // Enviar para planilha Google
+        try {
+            await fetch(APPS_SCRIPT_GIFTS_URL, {
+                method: 'POST',
+                body: JSON.stringify({
+                    type: 'free_contribution',
+                    contributor: name,
+                    amount: amount
+                }),
+                mode: 'no-cors'
+            });
+        } catch (error) {
+            console.error('Erro ao enviar:', error);
+        }
+
+        document.querySelector('.payment-modal')?.remove();
+        alert(`✅ Obrigado, ${name}! Sua contribuição de R$ ${amount.toFixed(2).replace('.', ',')} foi registrada!`);
     }
 }
+
+// Inicializar (será chamado no DOMContentLoaded)
+let giftManager;
+
 
 // RSVP Form Management
 class RSVPManager {
@@ -925,7 +1082,7 @@ document.head.appendChild(style);
 
 // Initialize all managers when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    new GiftManager();
+    giftManager = new NewGiftManager();
     new RSVPManager();
     new GalleryManager();
     new AnimationManager();
