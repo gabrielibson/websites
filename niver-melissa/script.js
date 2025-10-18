@@ -113,7 +113,7 @@ const GIFTS_DATA = {
 };
 
 const PIX_KEY = "gabrielibson@gmail.com";
-const APPS_SCRIPT_GIFTS_URL = 'https://script.google.com/macros/s/AKfycbyKSoQ8A4eBXDIHq7ltlL3wgip7hVRIgGmYdtqhiofISQdyVcDcLnwTTSwVvzL0aEI8/exec';
+const APPS_SCRIPT_GIFTS_URL = 'https://script.google.com/macros/s/AKfycbzTHYSN0o-zqqN_XxaulQaBc3dbkFzPRg6JXoCdxzE1dASXLOzfQuzLXhVu7rnUIvjU/exec';
 
 // Novo Gift Manager
 class NewGiftManager {
@@ -464,7 +464,7 @@ let giftManager;
 class RSVPManager {
     constructor() {
         // Google Apps Script URL (intermediário para o Google Forms)
-        this.appsScriptURL = 'https://script.google.com/macros/s/AKfycbyKSoQ8A4eBXDIHq7ltlL3wgip7hVRIgGmYdtqhiofISQdyVcDcLnwTTSwVvzL0aEI8/exec';
+        this.appsScriptURL = 'https://script.google.com/macros/s/AKfycbzTHYSN0o-zqqN_XxaulQaBc3dbkFzPRg6JXoCdxzE1dASXLOzfQuzLXhVu7rnUIvjU/exec';
         this.initForm();
     }
 
