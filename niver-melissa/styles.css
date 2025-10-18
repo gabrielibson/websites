@@ -862,6 +862,12 @@ section {
     box-shadow: 0 6px 20px rgba(255, 184, 77, 0.4);
 }
 
+.submit-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
 /* Footer */
 .footer {
     background: var(--text-dark);
@@ -1389,6 +1395,12 @@ section {
     transform: scale(0.98);
 }
 
+.gift-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
 /* Cards especiais */
 .gift-card.special-gift,
 .gift-card.free-contribution {
@@ -1531,6 +1543,18 @@ section {
     font-weight: 600;
     cursor: pointer;
     margin-top: 10px;
+    transition: all 0.3s ease;
+}
+
+.confirm-contribution-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 184, 77, 0.4);
+}
+
+.confirm-contribution-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
 }
 
 .close-modal-btn {

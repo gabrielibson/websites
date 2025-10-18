@@ -288,22 +288,28 @@ class NewGiftManager {
             return;
         }
 
-        // Salvar localmente
-        if (!this.contributions[giftName]) {
-            this.contributions[giftName] = [];
-        }
+        // Mostrar estado de carregamento
+        const confirmButton = document.querySelector('.confirm-contribution-btn');
+        const originalButtonText = confirmButton.textContent;
+        confirmButton.textContent = '⏳ Processando...';
+        confirmButton.disabled = true;
 
-        const contribution = {
-            contributor: contributorName,
-            price: price,
-            date: new Date().toISOString()
-        };
-
-        this.contributions[giftName].push(contribution);
-        localStorage.setItem('giftContributions', JSON.stringify(this.contributions));
-
-        // Enviar para planilha Google
         try {
+            // Salvar localmente
+            if (!this.contributions[giftName]) {
+                this.contributions[giftName] = [];
+            }
+
+            const contribution = {
+                contributor: contributorName,
+                price: price,
+                date: new Date().toISOString()
+            };
+
+            this.contributions[giftName].push(contribution);
+            localStorage.setItem('giftContributions', JSON.stringify(this.contributions));
+
+            // Enviar para planilha Google
             await fetch(APPS_SCRIPT_GIFTS_URL, {
                 method: 'POST',
                 body: JSON.stringify({
@@ -314,16 +320,19 @@ class NewGiftManager {
                 }),
                 mode: 'no-cors'
             });
+
+            // Atualizar UI
+            this.renderGifts();
+
+            // Fechar modal e mostrar confirmação
+            document.querySelector('.payment-modal')?.remove();
+            this.showGiftConfirmation(contributorName, giftName, price);
         } catch (error) {
             console.error('Erro ao enviar contribuição:', error);
+            confirmButton.textContent = originalButtonText;
+            confirmButton.disabled = false;
+            alert('Houve um erro ao processar sua contribuição. Por favor, tente novamente.');
         }
-
-        // Atualizar UI
-        this.renderGifts();
-
-        // Fechar modal e mostrar confirmação
-        document.querySelector('.payment-modal')?.remove();
-        alert(`✅ Obrigado, ${contributorName}! Sua contribuição de R$ ${price.toFixed(2).replace('.', ',')} para "${giftName}" foi registrada!`);
     }
 
     showSpecialGiftForm() {
@@ -367,8 +376,14 @@ class NewGiftManager {
             return;
         }
 
-        // Enviar para planilha Google
+        // Mostrar estado de carregamento
+        const submitButton = document.querySelector('.confirm-contribution-btn');
+        const originalButtonText = submitButton.textContent;
+        submitButton.textContent = '⏳ Enviando...';
+        submitButton.disabled = true;
+
         try {
+            // Enviar para planilha Google
             await fetch(APPS_SCRIPT_GIFTS_URL, {
                 method: 'POST',
                 body: JSON.stringify({
@@ -380,12 +395,15 @@ class NewGiftManager {
                 }),
                 mode: 'no-cors'
             });
+
+            document.querySelector('.payment-modal')?.remove();
+            this.showSpecialGiftConfirmation(name, description);
         } catch (error) {
             console.error('Erro ao enviar:', error);
+            submitButton.textContent = originalButtonText;
+            submitButton.disabled = false;
+            alert('Houve um erro ao enviar. Por favor, tente novamente.');
         }
-
-        document.querySelector('.payment-modal')?.remove();
-        alert(`✅ Obrigado, ${name}! Recebemos a informação sobre seu presente especial!`);
     }
 
     showFreeContribution() {
@@ -436,8 +454,14 @@ class NewGiftManager {
             return;
         }
 
-        // Enviar para planilha Google
+        // Mostrar estado de carregamento
+        const confirmButton = document.querySelector('.confirm-contribution-btn');
+        const originalButtonText = confirmButton.textContent;
+        confirmButton.textContent = '⏳ Processando...';
+        confirmButton.disabled = true;
+
         try {
+            // Enviar para planilha Google
             await fetch(APPS_SCRIPT_GIFTS_URL, {
                 method: 'POST',
                 body: JSON.stringify({
@@ -447,12 +471,126 @@ class NewGiftManager {
                 }),
                 mode: 'no-cors'
             });
+
+            document.querySelector('.payment-modal')?.remove();
+            this.showFreeContributionConfirmation(name, amount);
         } catch (error) {
             console.error('Erro ao enviar:', error);
+            confirmButton.textContent = originalButtonText;
+            confirmButton.disabled = false;
+            alert('Houve um erro ao processar sua contribuição. Por favor, tente novamente.');
         }
+    }
 
-        document.querySelector('.payment-modal')?.remove();
-        alert(`✅ Obrigado, ${name}! Sua contribuição de R$ ${amount.toFixed(2).replace('.', ',')} foi registrada!`);
+    showGiftConfirmation(contributorName, giftName, price) {
+        const modal = document.createElement('div');
+        modal.className = 'confirmation-modal';
+        modal.innerHTML = `
+            <div class="confirmation-content">
+                <div class="confirmation-header">
+                    <i class="fas fa-gift"></i>
+                    <h2>Obrigado, ${contributorName}!</h2>
+                </div>
+                <div class="confirmation-body">
+                    <p>Sua contribuição foi registrada com muito carinho!</p>
+                    <p class="success-text">✓ Contribuição confirmada com sucesso!</p>
+                    <div class="confirmation-details">
+                        <p><strong>Presente:</strong> ${giftName}</p>
+                        <p><strong>Valor:</strong> R$ ${price.toFixed(2).replace('.', ',')}</p>
+                    </div>
+                    <p class="celebration-text">A Mel agradece sua generosidade! 💛</p>
+                </div>
+                <button class="close-confirmation" onclick="this.parentElement.parentElement.remove()">
+                    Fechar
+                </button>
+            </div>
+        `;
+
+        this.styleConfirmationModal(modal);
+        document.body.appendChild(modal);
+    }
+
+    showSpecialGiftConfirmation(name, description) {
+        const modal = document.createElement('div');
+        modal.className = 'confirmation-modal';
+        modal.innerHTML = `
+            <div class="confirmation-content">
+                <div class="confirmation-header">
+                    <i class="fas fa-heart"></i>
+                    <h2>Obrigado, ${name}!</h2>
+                </div>
+                <div class="confirmation-body">
+                    <p>Recebemos a informação sobre seu presente especial!</p>
+                    <p class="success-text">✓ Informação registrada com sucesso!</p>
+                    <div class="confirmation-details">
+                        <p><strong>Descrição:</strong> ${description}</p>
+                    </div>
+                    <p class="celebration-text">Mal podemos esperar para ver! 🎁</p>
+                </div>
+                <button class="close-confirmation" onclick="this.parentElement.parentElement.remove()">
+                    Fechar
+                </button>
+            </div>
+        `;
+
+        this.styleConfirmationModal(modal);
+        document.body.appendChild(modal);
+    }
+
+    showFreeContributionConfirmation(name, amount) {
+        const modal = document.createElement('div');
+        modal.className = 'confirmation-modal';
+        modal.innerHTML = `
+            <div class="confirmation-content">
+                <div class="confirmation-header">
+                    <i class="fas fa-piggy-bank"></i>
+                    <h2>Obrigado, ${name}!</h2>
+                </div>
+                <div class="confirmation-body">
+                    <p>Sua contribuição foi registrada com muito carinho!</p>
+                    <p class="success-text">✓ Contribuição confirmada com sucesso!</p>
+                    <div class="confirmation-details">
+                        <p><strong>Valor:</strong> R$ ${amount.toFixed(2).replace('.', ',')}</p>
+                        <p><strong>Destino:</strong> Poupança da Mel 🐝</p>
+                    </div>
+                    <p class="celebration-text">Você está ajudando a construir o futuro da Mel! 💰</p>
+                </div>
+                <button class="close-confirmation" onclick="this.parentElement.parentElement.remove()">
+                    Fechar
+                </button>
+            </div>
+        `;
+
+        this.styleConfirmationModal(modal);
+        document.body.appendChild(modal);
+    }
+
+    styleConfirmationModal(modal) {
+        Object.assign(modal.style, {
+            position: 'fixed',
+            top: '0',
+            left: '0',
+            width: '100%',
+            height: '100%',
+            background: 'rgba(0,0,0,0.8)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: '10000',
+            animation: 'fadeIn 0.3s ease-out'
+        });
+
+        const content = modal.querySelector('.confirmation-content');
+        Object.assign(content.style, {
+            background: 'white',
+            borderRadius: '20px',
+            padding: '40px',
+            maxWidth: '500px',
+            width: '90%',
+            textAlign: 'center',
+            position: 'relative',
+            animation: 'slideInUp 0.3s ease-out'
+        });
     }
 }
 
