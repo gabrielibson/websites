@@ -147,8 +147,7 @@ class NewGiftManager {
             `;
 
             categoryData.items.forEach(item => {
-                const contributionsCount = this.getContributionsCount(item.name);
-                html += this.createGiftCard(item, contributionsCount);
+                html += this.createGiftCard(item);
             });
 
             html += `
@@ -217,22 +216,15 @@ class NewGiftManager {
         button.classList.toggle('active');
     }
 
-    createGiftCard(item, contributionsCount) {
+    createGiftCard(item) {
         return `
             <div class="gift-card" data-gift="${item.name}" data-price="${item.price}">
                 <div class="gift-icon">${item.emoji}</div>
                 <h4>${item.name}</h4>
                 <p class="gift-price">R$ ${item.price.toFixed(2).replace('.', ',')}</p>
-                <div class="gift-contributions">
-                    <span class="contributions-count">${contributionsCount} contribuiç${contributionsCount === 1 ? 'ão' : 'ões'}</span>
-                </div>
                 <button class="gift-btn" onclick="giftManager.showPaymentModal('${item.name}', ${item.price}, '${item.emoji}')">Presentear</button>
             </div>
         `;
-    }
-
-    getContributionsCount(giftName) {
-        return this.contributions[giftName]?.length || 0;
     }
 
     showPaymentModal(giftName, price, emoji) {
@@ -1218,16 +1210,34 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
+// Toggle gallery photos visibility
+function toggleGalleryPhotos() {
+    const hiddenPhotos = document.querySelectorAll('.gallery-hidden');
+    const button = document.getElementById('show-more-photos');
+
+    hiddenPhotos.forEach(photo => {
+        if (photo.style.display === 'none' || !photo.style.display) {
+            photo.style.display = 'block';
+            button.innerHTML = '<i class="fas fa-chevron-up"></i> Ver menos fotos';
+            button.classList.add('expanded');
+        } else {
+            photo.style.display = 'none';
+            button.innerHTML = '<i class="fas fa-chevron-down"></i> Ver mais fotos';
+            button.classList.remove('expanded');
+        }
+    });
+}
+
 // Initialize all managers when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     giftManager = new NewGiftManager();
     new RSVPManager();
     new GalleryManager();
     new AnimationManager();
-    
+
     // Countdown timer for the party
     new CountdownManager('2025-12-14 15:00:00');
-    
+
     console.log('🍯 Site da Mel carregado com sucesso! 🎉');
 });
 

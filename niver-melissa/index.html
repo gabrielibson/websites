@@ -145,13 +145,8 @@
             <!-- Seção de Fotos -->
             <div class="gallery-section">
                 <h3 class="gallery-subsection-title"><i class="fas fa-images"></i> Fotos</h3>
-                <div class="gallery-grid">
-                    <div class="gallery-item">
-                        <img src="img/galeria/mel4.JPG" alt="Melissa" loading="lazy">
-                    </div>
-                    <div class="gallery-item">
-                        <img src="img/galeria/mel5.JPG" alt="Melissa" loading="lazy">
-                    </div>
+                <div class="gallery-grid" id="photo-gallery">
+                    <!-- Fotos principais (sempre visíveis) -->
                     <div class="gallery-item">
                         <img src="img/galeria/mel6.JPG" alt="Melissa" loading="lazy">
                     </div>
@@ -159,23 +154,36 @@
                         <img src="img/galeria/mel7.JPG" alt="Melissa" loading="lazy">
                     </div>
                     <div class="gallery-item">
+                        <img src="img/galeria/mel4.JPG" alt="Melissa" loading="lazy">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="img/galeria/mel5.JPG" alt="Melissa" loading="lazy">
+                    </div>
+                    <div class="gallery-item">
                         <img src="img/galeria/mel8.JPG" alt="Melissa" loading="lazy">
                     </div>
                     <div class="gallery-item">
                         <img src="img/galeria/mel10.JPG" alt="Melissa" loading="lazy">
                     </div>
-                    <div class="gallery-item">
+
+                    <!-- Fotos adicionais (ocultas inicialmente) -->
+                    <div class="gallery-item gallery-hidden">
                         <img src="img/galeria/mel1.JPG" alt="Melissa" loading="lazy">
                     </div>
-                    <div class="gallery-item">
+                    <div class="gallery-item gallery-hidden">
                         <img src="img/galeria/mel2.JPG" alt="Melissa" loading="lazy">
                     </div>
-                    <div class="gallery-item">
+                    <div class="gallery-item gallery-hidden">
                         <img src="img/galeria/mel3.JPG" alt="Melissa" loading="lazy">
                     </div>
-                    <div class="gallery-item">
+                    <div class="gallery-item gallery-hidden">
                         <img src="img/galeria/mel9.JPG" alt="Melissa" loading="lazy">
                     </div>
+                </div>
+                <div class="gallery-actions">
+                    <button class="show-more-btn" id="show-more-photos" onclick="toggleGalleryPhotos()">
+                        <i class="fas fa-chevron-down"></i> Ver mais fotos
+                    </button>
                 </div>
             </div>
 
@@ -196,10 +204,6 @@
                         </video>
                     </div>
                 </div>
-            </div>
-
-            <div class="upload-section">
-                <p><strong>Quer adicionar fotos ou vídeos?</strong> Entre em contato conosco!</p>
             </div>
         </div>
     </section>
@@ -275,13 +279,6 @@
                     <h3>Contato</h3>
                     <p><i class="fas fa-whatsapp"></i> +351 914070020</p>
                     <p><i class="fas fa-envelope"></i> gabrielibson@gmail.com</p>
-                </div>
-                <div class="footer-section">
-                    <h3>Redes Sociais</h3>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-whatsapp"></i></a>
-                    </div>
                 </div>
                 <div class="footer-section">
                     <h3>1º Aniversário</h3>

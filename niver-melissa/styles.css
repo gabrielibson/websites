@@ -162,10 +162,6 @@ body::before {
     .footer-section p {
         justify-content: center;
     }
-    
-    .social-links {
-        justify-content: center;
-    }
 }
 
 @media (max-width: 480px) {
@@ -821,12 +817,42 @@ section {
     max-height: 600px;
 }
 
-.upload-section {
+.gallery-hidden {
+    display: none;
+}
+
+.gallery-actions {
     text-align: center;
-    padding: 30px;
-    background: rgba(244, 166, 166, 0.1);
-    border-radius: 15px;
-    border: 2px dashed var(--soft-peach);
+    margin-top: 30px;
+}
+
+.show-more-btn {
+    background: linear-gradient(135deg, var(--honey-color) 0%, var(--secondary-color) 100%);
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 184, 77, 0.3);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.show-more-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 184, 77, 0.4);
+}
+
+.show-more-btn i {
+    transition: transform 0.3s ease;
+}
+
+.show-more-btn.expanded i {
+    transform: rotate(180deg);
 }
 
 /* RSVP Section */
@@ -950,29 +976,6 @@ section {
     display: flex;
     align-items: center;
     gap: 10px;
-}
-
-.social-links {
-    display: flex;
-    gap: 15px;
-}
-
-.social-links a {
-    width: 40px;
-    height: 40px;
-    background: var(--honey-color);
-    color: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-.social-links a:hover {
-    background: var(--secondary-color);
-    transform: scale(1.1);
 }
 
 .footer-bottom {
