@@ -628,6 +628,49 @@ section {
 
 .gifts-intro {
     margin-bottom: 50px;
+    background: linear-gradient(135deg, rgba(255, 184, 77, 0.05) 0%, rgba(244, 200, 66, 0.05) 100%);
+    border: 2px solid rgba(255, 184, 77, 0.3);
+    border-radius: 20px;
+    padding: 30px;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.gifts-main-message {
+    font-size: 1.2rem;
+    color: var(--text-dark);
+    margin-bottom: 20px;
+    text-align: center;
+    line-height: 1.8;
+}
+
+.gifts-practical-note {
+    font-size: 1rem;
+    color: var(--text-dark);
+    margin-bottom: 15px;
+    line-height: 1.6;
+}
+
+.gifts-suggestions {
+    list-style: none;
+    padding: 0;
+    margin: 15px 0 0 0;
+}
+
+.gifts-suggestions li {
+    padding: 12px 15px;
+    margin-bottom: 10px;
+    background: white;
+    border-radius: 10px;
+    border-left: 4px solid var(--honey-color);
+    transition: all 0.3s ease;
+    line-height: 1.6;
+}
+
+.gifts-suggestions li:hover {
+    transform: translateX(5px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .travel-info {
@@ -1251,6 +1294,70 @@ section {
     border-radius: 15px;
     box-shadow: 0 3px 15px rgba(0,0,0,0.1);
     overflow: hidden;
+}
+
+.gift-category-featured {
+    border: 3px solid var(--honey-color);
+    box-shadow: 0 8px 30px rgba(255, 184, 77, 0.3);
+    position: relative;
+}
+
+.gift-category-featured::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, var(--honey-color) 0%, var(--secondary-color) 100%);
+}
+
+.featured-badge {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ff8787 100%);
+    color: white;
+    padding: 3px 12px;
+    border-radius: 15px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-left: 10px;
+    box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
+}
+
+.category-note-highlighted {
+    background: linear-gradient(135deg, rgba(255, 184, 77, 0.15) 0%, rgba(244, 200, 66, 0.15) 100%);
+    border-left: 4px solid var(--honey-color);
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.gift-card-highlighted {
+    border: 2px solid var(--honey-color);
+    box-shadow: 0 6px 25px rgba(255, 184, 77, 0.2);
+    position: relative;
+}
+
+.gift-card-highlighted::after {
+    content: '⭐';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.5rem;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.8;
+    }
 }
 
 .category-header-toggle {

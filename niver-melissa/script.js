@@ -128,6 +128,30 @@ class NewGiftManager {
 
         let html = '';
 
+        // Categoria Presentes Personalizados (DESTAQUE - PRIMEIRA!)
+        html += `
+            <div class="gift-category-new gift-category-featured">
+                <button class="category-header-toggle active" onclick="giftManager.toggleCategory('category-special', this)">
+                    <div class="category-title-content">
+                        <i class="fas fa-heart"></i>
+                        <span>💝 Presentes Personalizados <span class="featured-badge">Especial</span></span>
+                    </div>
+                    <i class="fas fa-chevron-down category-toggle-icon rotated"></i>
+                </button>
+                <div class="category-content active" id="category-special">
+                    <p class="category-note-highlighted">✨ <strong>Presentes com muito carinho!</strong> Algo feito por você, artesanal, desenho, cartinha... Vale tudo! Se for grande ou pesado, podemos combinar de enviar depois para Portugal.</p>
+                    <div class="gift-cards-grid">
+                        <div class="gift-card special-gift gift-card-highlighted">
+                            <div class="gift-icon">🎨</div>
+                            <h4>Tenho um presente especial</h4>
+                            <p class="gift-description">Presentes personalizados são únicos e preciosos! Clique para nos contar</p>
+                            <button class="gift-btn" onclick="giftManager.showSpecialGiftForm()">💌 Informar Presente</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
         // Renderizar categorias normais com collapse
         Object.entries(GIFTS_DATA).forEach(([categoryName, categoryData], index) => {
             const categoryId = `category-${index}`;
@@ -157,41 +181,17 @@ class NewGiftManager {
             `;
         });
 
-        // Categoria Presentes Personalizados
-        html += `
-            <div class="gift-category-new">
-                <button class="category-header-toggle" onclick="giftManager.toggleCategory('category-special', this)">
-                    <div class="category-title-content">
-                        <i class="fas fa-gift"></i>
-                        <span>Presentes Personalizados</span>
-                    </div>
-                    <i class="fas fa-chevron-down category-toggle-icon"></i>
-                </button>
-                <div class="category-content" id="category-special">
-                    <p class="category-note">💝 Tem um presente especial para a Mel? Conte para nós! Lembre-se: moramos em Portugal e temos limitação de bagagem. Itens pequenos e leves são mais fáceis de transportar.</p>
-                    <div class="gift-cards-grid">
-                        <div class="gift-card special-gift">
-                            <div class="gift-icon">💝</div>
-                            <h4>Tenho um presente especial</h4>
-                            <p class="gift-description">Clique para nos contar sobre seu presente</p>
-                            <button class="gift-btn" onclick="giftManager.showSpecialGiftForm()">Informar Presente</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-
         // Categoria Poupança da Mel
         html += `
             <div class="gift-category-new">
-                <button class="category-header-toggle active" onclick="giftManager.toggleCategory('category-savings', this)">
+                <button class="category-header-toggle" onclick="giftManager.toggleCategory('category-savings', this)">
                     <div class="category-title-content">
                         <i class="fas fa-piggy-bank"></i>
                         <span>Poupança da Mel</span>
                     </div>
-                    <i class="fas fa-chevron-down category-toggle-icon rotated"></i>
+                    <i class="fas fa-chevron-down category-toggle-icon"></i>
                 </button>
-                <div class="category-content active" id="category-savings">
+                <div class="category-content" id="category-savings">
                     <div class="gift-cards-grid">
                         <div class="gift-card free-contribution">
                             <div class="gift-icon">💰</div>
@@ -651,6 +651,26 @@ class RSVPManager {
             if (phoneInput) {
                 phoneInput.addEventListener('input', this.formatPhone.bind(this));
             }
+
+            // Controlar visibilidade do campo de detalhes das crianças
+            const childrenSelect = document.getElementById('children');
+            const childrenDetailsGroup = document.getElementById('children-details-group');
+            const childrenDetailsInput = document.getElementById('children-details');
+
+            if (childrenSelect && childrenDetailsGroup && childrenDetailsInput) {
+                childrenSelect.addEventListener('change', (e) => {
+                    const numChildren = parseInt(e.target.value);
+
+                    if (numChildren > 0) {
+                        childrenDetailsGroup.style.display = 'block';
+                        childrenDetailsInput.required = true;
+                    } else {
+                        childrenDetailsGroup.style.display = 'none';
+                        childrenDetailsInput.required = false;
+                        childrenDetailsInput.value = '';
+                    }
+                });
+            }
         }
     }
 
@@ -687,6 +707,7 @@ class RSVPManager {
             phone: formData.get('phone'),
             adults: formData.get('adults'),
             children: formData.get('children'),
+            childrenDetails: formData.get('children-details') || '',
             dietary: formData.get('dietary'),
             message: formData.get('message'),
             submittedAt: new Date().toISOString()
@@ -733,6 +754,7 @@ class RSVPManager {
                     phone: data.phone || '',
                     adults: data.adults,
                     children: data.children,
+                    childrenDetails: data.childrenDetails || '',
                     dietary: data.dietary || '',
                     message: data.message || ''
                 }),
@@ -771,6 +793,7 @@ class RSVPManager {
                     <div class="confirmation-details">
                         <p><strong>Adultos:</strong> ${data.adults}</p>
                         <p><strong>Crianças:</strong> ${data.children}</p>
+                        ${data.childrenDetails ? `<p><strong>Detalhes das Crianças:</strong><br>${data.childrenDetails.replace(/\n/g, '<br>')}</p>` : ''}
                         ${data.dietary ? `<p><strong>Restrições:</strong> ${data.dietary}</p>` : ''}
                     </div>
                     <p class="celebration-text">Mal podemos esperar para celebrar com vocês! 🎉</p>

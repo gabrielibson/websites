@@ -125,7 +125,15 @@
         <div class="container">
             <div class="section-header">
                 <h2>Lista de Presentes</h2>
-                <p>✈️ Como moramos em Portugal e temos limitação de bagagem, preferimos contribuições em dinheiro. Assim podemos comprar os itens conforme necessário!</p>
+                <div class="gifts-intro">
+                    <p class="gifts-main-message">💝 <strong>O que mais importa é o seu carinho!</strong> Presentes feitos à mão, desenhos, cartinhas ou qualquer lembrança especial são tesouros que guardaremos para sempre.</p>
+                    <p class="gifts-practical-note">✈️ <strong>Sobre presentes físicos:</strong> Como moramos em Portugal e voltaremos de avião, temos limitação de bagagem. Por isso, caso prefira presentear com algo material, sugerimos:</p>
+                    <ul class="gifts-suggestions">
+                        <li>🎨 <strong>Presentes personalizados/artesanais</strong> (pequenos e leves - cabem na mala!)</li>
+                        <li>📬 <strong>Itens que possam ser enviados por correio</strong> para Portugal depois</li>
+                        <li>💰 <strong>Contribuições financeiras</strong> para adquirirmos o que a Mel precisar</li>
+                    </ul>
+                </div>
             </div>
 
             <div id="gifts-container">
@@ -253,6 +261,11 @@
                             <option value="5">5</option>
                             <option value="__other_option__">Outro</option>
                         </select>
+                    </div>
+                    <div class="form-group" id="children-details-group" style="display: none;">
+                        <label for="children-details">Informações das Crianças *</label>
+                        <textarea id="children-details" name="children-details" rows="4" placeholder="Por favor, informe idade e sexo de cada criança&#10;Exemplo:&#10;- João, 3 anos, masculino&#10;- Maria, 5 anos, feminino"></textarea>
+                        <small class="field-hint">Informe nome, idade e sexo de cada criança (uma por linha)</small>
                     </div>
                     <div class="form-group">
                         <label for="dietary">Restrições Alimentares</label>
