@@ -1592,6 +1592,49 @@ section {
     border-color: var(--honey-color);
 }
 
+.message-toggle {
+    margin: 15px 0;
+}
+
+.toggle-message-btn {
+    background: transparent;
+    border: 2px dashed rgba(255, 184, 77, 0.4);
+    color: var(--honey-color);
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    text-align: left;
+}
+
+.toggle-message-btn:hover {
+    background: rgba(255, 184, 77, 0.1);
+    border-color: var(--honey-color);
+}
+
+.message-field {
+    margin-top: 10px;
+}
+
+.message-field textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid rgba(255, 184, 77, 0.3);
+    border-radius: 10px;
+    font-size: 1rem;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 80px;
+}
+
+.message-field textarea:focus {
+    outline: none;
+    border-color: var(--honey-color);
+    box-shadow: 0 0 0 3px rgba(255, 184, 77, 0.1);
+}
+
 .confirm-contribution-btn {
     width: 100%;
     background: linear-gradient(135deg, var(--honey-color) 0%, var(--secondary-color) 100%);
@@ -1626,6 +1669,31 @@ section {
     cursor: pointer;
     font-weight: 600;
     margin-top: 15px;
+}
+
+.close-modal-x {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    color: #999;
+    cursor: pointer;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.close-modal-x:hover {
+    background: rgba(0, 0, 0, 0.1);
+    color: #333;
+    transform: rotate(90deg);
 }
 
 /* Responsive */

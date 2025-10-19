@@ -232,6 +232,9 @@ class NewGiftManager {
         modal.className = 'payment-modal';
         modal.innerHTML = `
             <div class="payment-content">
+                <button class="close-modal-x" onclick="this.parentElement.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
                 <div class="payment-header">
                     <div class="gift-icon">${emoji}</div>
                     <h2>${giftName}</h2>
@@ -251,14 +254,20 @@ class NewGiftManager {
                 <div class="contributor-form">
                     <p><strong>Após fazer a transferência, informe seu nome:</strong></p>
                     <input type="text" id="contributor-name" placeholder="Seu nome completo" required>
+
+                    <div class="message-toggle">
+                        <button type="button" class="toggle-message-btn" onclick="giftManager.toggleMessage(this)">
+                            💌 Adicionar mensagem para a Mel (opcional)
+                        </button>
+                        <div class="message-field" style="display: none;">
+                            <textarea id="gift-message" placeholder="Deixe uma mensagem carinhosa para a Mel..." rows="3"></textarea>
+                        </div>
+                    </div>
+
                     <button class="confirm-contribution-btn" onclick="giftManager.confirmContribution('${giftName}', ${price})">
                         Confirmar Contribuição
                     </button>
                 </div>
-
-                <button class="close-modal-btn" onclick="this.parentElement.parentElement.remove()">
-                    Fechar
-                </button>
             </div>
         `;
 
@@ -271,9 +280,21 @@ class NewGiftManager {
         });
     }
 
+    toggleMessage(button) {
+        const messageField = button.parentElement.querySelector('.message-field');
+        if (messageField.style.display === 'none') {
+            messageField.style.display = 'block';
+            button.innerHTML = '💌 Ocultar mensagem';
+        } else {
+            messageField.style.display = 'none';
+            button.innerHTML = '💌 Adicionar mensagem para a Mel (opcional)';
+        }
+    }
+
     async confirmContribution(giftName, price) {
         const nameInput = document.getElementById('contributor-name');
         const contributorName = nameInput.value.trim();
+        const message = document.getElementById('gift-message')?.value.trim() || '';
 
         if (!contributorName) {
             alert('Por favor, informe seu nome.');
@@ -308,7 +329,8 @@ class NewGiftManager {
                     type: 'gift_contribution',
                     giftName: giftName,
                     contributor: contributorName,
-                    amount: price
+                    amount: price,
+                    message: message
                 }),
                 mode: 'no-cors'
             });
@@ -332,6 +354,9 @@ class NewGiftManager {
         modal.className = 'payment-modal';
         modal.innerHTML = `
             <div class="payment-content">
+                <button class="close-modal-x" onclick="this.parentElement.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
                 <div class="payment-header">
                     <div class="gift-icon">💝</div>
                     <h2>Presente Personalizado</h2>
@@ -343,14 +368,19 @@ class NewGiftManager {
                     <input type="tel" id="special-phone" placeholder="Telefone/WhatsApp">
                     <textarea id="special-description" placeholder="Descreva seu presente especial..." rows="4" style="width: 100%; padding: 12px; border: 2px solid rgba(255, 184, 77, 0.3); border-radius: 10px; resize: vertical;"></textarea>
 
+                    <div class="message-toggle">
+                        <button type="button" class="toggle-message-btn" onclick="giftManager.toggleMessage(this)">
+                            💌 Adicionar mensagem para a Mel (opcional)
+                        </button>
+                        <div class="message-field" style="display: none;">
+                            <textarea id="special-message" placeholder="Deixe uma mensagem carinhosa para a Mel..." rows="3"></textarea>
+                        </div>
+                    </div>
+
                     <button class="confirm-contribution-btn" onclick="giftManager.submitSpecialGift()">
                         Enviar Informação
                     </button>
                 </div>
-
-                <button class="close-modal-btn" onclick="this.parentElement.parentElement.remove()">
-                    Cancelar
-                </button>
             </div>
         `;
 
@@ -362,6 +392,7 @@ class NewGiftManager {
         const email = document.getElementById('special-email').value.trim();
         const phone = document.getElementById('special-phone').value.trim();
         const description = document.getElementById('special-description').value.trim();
+        const message = document.getElementById('special-message')?.value.trim() || '';
 
         if (!name || !email || !description) {
             alert('Por favor, preencha todos os campos obrigatórios.');
@@ -383,7 +414,8 @@ class NewGiftManager {
                     name: name,
                     email: email,
                     phone: phone,
-                    description: description
+                    description: description,
+                    message: message
                 }),
                 mode: 'no-cors'
             });
@@ -403,6 +435,9 @@ class NewGiftManager {
         modal.className = 'payment-modal';
         modal.innerHTML = `
             <div class="payment-content">
+                <button class="close-modal-x" onclick="this.parentElement.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
                 <div class="payment-header">
                     <div class="gift-icon">💰</div>
                     <h2>Contribuição Livre</h2>
@@ -423,14 +458,20 @@ class NewGiftManager {
                     <p><strong>Após fazer a transferência:</strong></p>
                     <input type="text" id="free-contributor-name" placeholder="Seu nome completo" required>
                     <input type="number" id="free-amount" placeholder="Valor contribuído (R$)" required min="1">
+
+                    <div class="message-toggle">
+                        <button type="button" class="toggle-message-btn" onclick="giftManager.toggleMessage(this)">
+                            💌 Adicionar mensagem para a Mel (opcional)
+                        </button>
+                        <div class="message-field" style="display: none;">
+                            <textarea id="free-message" placeholder="Deixe uma mensagem carinhosa para a Mel..." rows="3"></textarea>
+                        </div>
+                    </div>
+
                     <button class="confirm-contribution-btn" onclick="giftManager.confirmFreeContribution()">
                         Confirmar Contribuição
                     </button>
                 </div>
-
-                <button class="close-modal-btn" onclick="this.parentElement.parentElement.remove()">
-                    Fechar
-                </button>
             </div>
         `;
 
@@ -440,6 +481,7 @@ class NewGiftManager {
     async confirmFreeContribution() {
         const name = document.getElementById('free-contributor-name').value.trim();
         const amount = parseFloat(document.getElementById('free-amount').value);
+        const message = document.getElementById('free-message')?.value.trim() || '';
 
         if (!name || !amount || amount <= 0) {
             alert('Por favor, preencha todos os campos corretamente.');
@@ -459,7 +501,8 @@ class NewGiftManager {
                 body: JSON.stringify({
                     type: 'free_contribution',
                     contributor: name,
-                    amount: amount
+                    amount: amount,
+                    message: message
                 }),
                 mode: 'no-cors'
             });
