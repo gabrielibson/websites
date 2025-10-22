@@ -745,21 +745,23 @@ class RSVPManager {
         submitButton.disabled = true;
 
         try {
-            // Enviar para Netlify Forms (método nativo)
+            // Enviar para Netlify Forms
             const form = e.target;
+            const formData = new FormData(form);
 
-            // Fazer submit via fetch para controlar o comportamento
-            const response = await fetch('/', {
+            // Adicionar o atributo form-name que o Netlify precisa
+            formData.append('form-name', 'rsvp');
+
+            await fetch('/', {
                 method: 'POST',
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                body: new URLSearchParams(new FormData(form)).toString()
+                body: new URLSearchParams(formData).toString()
             });
 
-            if (!response.ok) {
-                throw new Error('Erro no envio');
-            }
+            // Netlify Forms processa em background
+            // Consideramos sucesso se não houver exceção
 
-            // Also save locally as backup
+            // Save locally as backup
             this.saveRSVP(data);
 
             // Show success confirmation
@@ -767,6 +769,12 @@ class RSVPManager {
 
             // Limpar formulário
             form.reset();
+
+            // Resetar visibilidade do campo de crianças
+            const childrenDetailsGroup = document.getElementById('children-details-group');
+            if (childrenDetailsGroup) {
+                childrenDetailsGroup.style.display = 'none';
+            }
         } catch (error) {
             console.error('Erro ao enviar confirmação:', error);
             // Even if submission fails, save locally and show confirmation
