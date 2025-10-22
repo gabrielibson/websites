@@ -741,21 +741,35 @@ class RSVPManager {
         // Show loading state
         const submitButton = e.target.querySelector('button[type="submit"]');
         const originalButtonText = submitButton.textContent;
-        submitButton.textContent = 'Enviando...';
+        submitButton.textContent = '⏳ Enviando...';
         submitButton.disabled = true;
 
         try {
-            // Send to Google Forms
-            await this.sendToGoogleForms(data);
+            // Enviar para Netlify Forms (método nativo)
+            const form = e.target;
+
+            // Fazer submit via fetch para controlar o comportamento
+            const response = await fetch('/', {
+                method: 'POST',
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams(new FormData(form)).toString()
+            });
+
+            if (!response.ok) {
+                throw new Error('Erro no envio');
+            }
 
             // Also save locally as backup
             this.saveRSVP(data);
 
             // Show success confirmation
             this.showConfirmation(data);
+
+            // Limpar formulário
+            form.reset();
         } catch (error) {
             console.error('Erro ao enviar confirmação:', error);
-            // Even if Google Forms fails, save locally and show confirmation
+            // Even if submission fails, save locally and show confirmation
             this.saveRSVP(data);
             this.showConfirmation(data, true); // true = show warning about possible error
         } finally {
