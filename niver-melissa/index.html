@@ -17,11 +17,11 @@
             </div>
             <ul class="nav-menu">
                 <li><a href="#home" class="nav-link">Início</a></li>
-                <li><a href="#about" class="nav-link">A Festa</a></li>
+                <li><a href="#about" class="nav-link">A festa</a></li>
                 <li><a href="#info" class="nav-link">Informações</a></li>
                 <li><a href="#gifts" class="nav-link">Presentes</a></li>
                 <li><a href="#gallery" class="nav-link">Galeria</a></li>
-                <li><a href="#rsvp" class="nav-link">Confirmar</a></li>
+                <li><a href="#rsvp" class="nav-link">Confirmar Presença</a></li>
             </ul>
             <div class="hamburger">
                 <span></span>
@@ -37,13 +37,16 @@
             <div class="hero-image">
                 <div class="birthday-girl-photo">
                     <div class="photo-frame">
-                        <img src="img/hero/foto-inicio.JPG" alt="Melissa - 1 ano" class="birthday-main-photo">
+                        <img src="img/hero/foto-inicio.jpeg" alt="Melissa - 1 ano" class="birthday-main-photo">
                     </div>
                 </div>
             </div>
             <div class="hero-text">
                 <h1 class="hero-title">Melissa faz 1 aninho!</h1>
-                <p class="hero-subtitle">Venha celebrar com a nova Guardiã do Bosque Encantado</p>
+                <p class="hero-subtitle">O Bosque dos Cem Acres está em festa! 
+                    Vamos celebrar o mel, o amor e o primeiro ano da nossa Melissa. 
+                    Um dia doce, com aroma de flores, cheio de risos e abraços apertados.
+                </p>
                 <div class="hero-date">
                     <i class="fas fa-calendar-alt"></i>
                     <span>14/12/2025</span>
@@ -64,16 +67,28 @@
     <section id="about" class="about">
         <div class="container">
             <div class="section-header">
-                <h2>A Nova Guardiã do Bosque</h2>
-                <p>Nossa pequena Mel está crescendo e se tornando a nova guardiã do Bosque dos Cem Acres</p>
+                <h2>Melissa no Bosque dos Cem Acres</h2>
+                <p>
+                    Ela está crescendo e esbanjando graciosidade por onde passa...
+                    com seu olhar amoroso distribui sua doçura em forma de sorrisos e encanta qualquer um que esteja ao seu alcance.
+                    Ela é guardiã de tudo que há de mais puro e doce!
+                </p>
             </div>
             <div class="about-content">
                 <div class="about-text">
                     <div class="story-card">
-                        <h3>🍯 A História da Mel</h3>
-                        <p>Há um ano, uma pequena guardiã chegou ao mundo para cuidar do nosso bosque encantado. Melissa, carinhosamente chamada de Mel, trouxe toda a doçura e magia que o Ursinho Pooh tanto ama.</p>
+                        <h3>🍯 A história da Mel</h3>
+                        <p>Lá no Bosque dos Cem Acres, onde as flores do campo crescem sem pressa, o mel escorre devagar dos troncos e as risadas ecoam entre as árvores… 
+                        Pooh e seus amigos vivem a redescobrir a alegria nas pequenas coisas ao longo das aventuras diárias.</p>
                         
-                        <p>Agora, no seu primeiro aniversário, queremos celebrar com todos os amigos e familiares esta data tão especial. Venha fazer parte desta aventura mágica!</p>
+                        <p>
+                            Então nasce Melissa, a guardiã do mel e dos sorrisos. 
+                            Com seus olhinhos curiosos e vívidos se maravilha continuamente com a graça do viver, seja ao sentir um raio de sol, um abraço apertado ou apenas o perfume do mel no ar.
+                        </p>
+
+                        <p>
+                            O Pooh e seus amigos nos convidam a acessar um instante mágico de graça e encantamento na celebração do dia mais doce do ano: o dia da Mel!
+                        </p>
                         
                         <div class="highlight-box">
                             <i class="fas fa-heart"></i>
@@ -101,8 +116,8 @@
                         <i class="fas fa-calendar-alt"></i>
                     </div>
                     <h3>Data e Horário</h3>
-                    <p><strong>Data:</strong> Sábado, 14/12/2025</p>
-                    <p><strong>Horário:</strong> 15h às 18h</p>
+                    <p><strong>Data:</strong> Domingo, 14/12/2025</p>
+                    <p><strong>Horário:</strong> 15h às 19h</p>
                     <button class="map-button" onclick="addToCalendar()"><i class="fas fa-calendar-plus"></i> Adicionar ao Calendário</button>
                     <p class="note">Não esqueça! 🎉</p>
                 </div>
@@ -129,7 +144,7 @@
                     <p class="gifts-main-message">💝 <strong>O que mais importa é o seu carinho!</strong> Presentes feitos à mão, desenhos, cartinhas ou qualquer lembrança especial são tesouros que guardaremos para sempre.</p>
                     <p class="gifts-practical-note">✈️ <strong>Sobre presentes físicos:</strong> Como moramos em Portugal e voltaremos de avião, temos limitação de bagagem. Por isso, caso prefira presentear com algo material, sugerimos:</p>
                     <ul class="gifts-suggestions">
-                        <li>🎨 <strong>Presentes personalizados/artesanais</strong> (pequenos e leves - cabem na mala!)</li>
+                        <li>🎨 <strong>Presentes personalizados/artesanais</strong> (cabem na mala!)</li>
                         <li>📬 <strong>Itens que possam ser enviados por correio</strong> para Portugal depois</li>
                         <li>💰 <strong>Contribuições financeiras</strong> para adquirirmos o que a Mel precisar</li>
                     </ul>
@@ -283,6 +298,35 @@
             </div>
         </div>
     </section>
+
+    <!-- Audio Player -->
+    <audio id="background-music" loop>
+        <source src="audio/Winnie the Pooh.mp3" type="audio/mpeg">
+        Seu navegador não suporta áudio.
+    </audio>
+
+    <!-- Music Control Button (flutuante) -->
+    <button id="music-toggle" class="music-toggle-btn" style="display: none;">
+        <i class="fas fa-music"></i>
+    </button>
+
+    <!-- Welcome Modal (Music Permission) -->
+    <div id="welcome-modal" class="welcome-modal">
+        <div class="welcome-content">
+            <div class="welcome-icon">🎉</div>
+            <h2>Bem-vindo à Festa da Mel!</h2>
+            <p>Preparamos uma música especial para você curtir enquanto navega.</p>
+            <p class="welcome-question">Gostaria de ouvir música de fundo?</p>
+            <div class="welcome-buttons">
+                <button class="welcome-btn welcome-btn-yes" onclick="acceptMusic()">
+                    <i class="fas fa-music"></i> Sim, quero ouvir!
+                </button>
+                <button class="welcome-btn welcome-btn-no" onclick="declineMusic()">
+                    <i class="fas fa-volume-mute"></i> Não, obrigado
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer class="footer">

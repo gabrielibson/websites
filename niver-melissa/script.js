@@ -113,6 +113,7 @@ const GIFTS_DATA = {
 };
 
 const PIX_KEY = "gabrielibson@gmail.com";
+const MERCADO_PAGO_LINK = "[ADICIONAR_LINK_MERCADO_PAGO]"; // Link de pagamento do Mercado Pago
 const APPS_SCRIPT_GIFTS_URL = 'https://script.google.com/macros/s/AKfycbzTHYSN0o-zqqN_XxaulQaBc3dbkFzPRg6JXoCdxzE1dASXLOzfQuzLXhVu7rnUIvjU/exec';
 
 // Novo Gift Manager
@@ -247,6 +248,18 @@ class NewGiftManager {
                         <div class="pix-key">${PIX_KEY}</div>
                         <button class="copy-pix-btn" onclick="giftManager.copyPix('${PIX_KEY}')">
                             <i class="fas fa-copy"></i> Copiar Chave PIX
+                        </button>
+                    </div>
+
+                    <div class="payment-divider">
+                        <span>OU</span>
+                    </div>
+
+                    <div class="payment-option">
+                        <h3><i class="fas fa-credit-card"></i> Mercado Pago</h3>
+                        <p class="payment-option-desc">Cartão de crédito, débito ou saldo</p>
+                        <button class="mercado-pago-btn" onclick="window.open('${MERCADO_PAGO_LINK}', '_blank')">
+                            <i class="fas fa-external-link-alt"></i> Pagar com Mercado Pago
                         </button>
                     </div>
                 </div>
@@ -450,6 +463,18 @@ class NewGiftManager {
                         <div class="pix-key">${PIX_KEY}</div>
                         <button class="copy-pix-btn" onclick="giftManager.copyPix('${PIX_KEY}')">
                             <i class="fas fa-copy"></i> Copiar Chave PIX
+                        </button>
+                    </div>
+
+                    <div class="payment-divider">
+                        <span>OU</span>
+                    </div>
+
+                    <div class="payment-option">
+                        <h3><i class="fas fa-credit-card"></i> Mercado Pago</h3>
+                        <p class="payment-option-desc">Cartão de crédito, débito ou saldo</p>
+                        <button class="mercado-pago-btn" onclick="window.open('${MERCADO_PAGO_LINK}', '_blank')">
+                            <i class="fas fa-external-link-alt"></i> Pagar com Mercado Pago
                         </button>
                     </div>
                 </div>
@@ -1276,6 +1301,48 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
+// Music Control Functions
+function acceptMusic() {
+    const music = document.getElementById('background-music');
+    const modal = document.getElementById('welcome-modal');
+    const toggleBtn = document.getElementById('music-toggle');
+
+    music.play().catch(error => {
+        console.log('Erro ao reproduzir música:', error);
+    });
+
+    modal.style.display = 'none';
+    toggleBtn.style.display = 'flex';
+    toggleBtn.classList.add('playing');
+
+    localStorage.setItem('musicPreference', 'accepted');
+}
+
+function declineMusic() {
+    const modal = document.getElementById('welcome-modal');
+    const toggleBtn = document.getElementById('music-toggle');
+
+    modal.style.display = 'none';
+    toggleBtn.style.display = 'flex';
+
+    localStorage.setItem('musicPreference', 'declined');
+}
+
+function toggleMusic() {
+    const music = document.getElementById('background-music');
+    const toggleBtn = document.getElementById('music-toggle');
+
+    if (music.paused) {
+        music.play().catch(error => {
+            console.log('Erro ao reproduzir música:', error);
+        });
+        toggleBtn.classList.add('playing');
+    } else {
+        music.pause();
+        toggleBtn.classList.remove('playing');
+    }
+}
+
 // Toggle gallery photos visibility
 function toggleGalleryPhotos() {
     const hiddenPhotos = document.querySelectorAll('.gallery-hidden');
@@ -1303,6 +1370,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Countdown timer for the party
     new CountdownManager('2025-12-14 15:00:00');
+
+    // Music control setup
+    const musicToggleBtn = document.getElementById('music-toggle');
+    const welcomeModal = document.getElementById('welcome-modal');
+    const musicPreference = localStorage.getItem('musicPreference');
+
+    // Add click listener to music toggle button
+    if (musicToggleBtn) {
+        musicToggleBtn.addEventListener('click', toggleMusic);
+    }
+
+    // Check if user has already made a choice
+    if (musicPreference === 'accepted') {
+        welcomeModal.style.display = 'none';
+        musicToggleBtn.style.display = 'flex';
+        // Auto-play if they accepted before (user needs to interact first in most browsers)
+    } else if (musicPreference === 'declined') {
+        welcomeModal.style.display = 'none';
+        musicToggleBtn.style.display = 'flex';
+    } else {
+        // First time visitor - show welcome modal
+        welcomeModal.style.display = 'flex';
+    }
 
     console.log('🍯 Site da Mel carregado com sucesso! 🎉');
 });
