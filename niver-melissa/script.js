@@ -113,7 +113,44 @@ const GIFTS_DATA = {
 };
 
 const PIX_KEY = "gabrielibson@gmail.com";
-const MERCADO_PAGO_LINK = "[ADICIONAR_LINK_MERCADO_PAGO]"; // Link de pagamento do Mercado Pago
+
+// Links do Mercado Pago por categoria
+const MERCADO_PAGO_LINKS = {
+    // === Aprendizagem e Desenvolvimento Motor ===
+    "Brinquedo de encaixe": "https://mpago.la/2AJXWJC",
+    "Torre de anéis": "https://mpago.la/1xcEfZh",
+    "Blocos de montar": "https://mpago.la/2gVuA2M",
+    "Mesa de atividades": "https://mpago.la/19L29hH",
+    "Quebra-cabeça de madeira": "https://mpago.la/1TmicYD",
+    "Brinquedo de puxar": "https://mpago.la/1WzgUyg",
+
+    // === Cavalgáveis e Andadores ===
+    "Andador educativo": "https://mpago.la/33qXsVB",
+    "Cavalinho de balanço": "https://mpago.la/1LUoCxw",
+    "Triciclo com empurrador": "https://mpago.la/1vNgfTY",
+    "Carrinho de empurrar": "https://mpago.la/1fWYWDR",
+    "Balanço infantil": "https://mpago.la/1f1kv1f",
+
+    // === Brinquedos e Livros ===
+    "Livrinhos infantis (kit 5)": "https://mpago.la/1r6D6ijI",
+    "Livros de pano/plástico": "https://mpago.la/1mTnizF",
+    "Brinquedo musical": "https://mpago.la/2iRk17n",
+    "Bonecos/Pelúcias": "https://mpago.la/2oQMVJz",
+    "Brinquedos para banho": "https://mpago.la/15cG4TC",
+    "Massinha de modelar": "https://mpago.la/2FTPueL",
+
+    // === Vestuário (18-24 meses) ===
+    "Conjunto de roupas": "https://mpago.la/1qKbys5",
+    "Sapatinhos (18-21)": "https://mpago.la/2gn25FE",
+    "Vestidos/Conjuntos": "https://mpago.la/2BmHdxN",
+    "Casaco/Agasalho": "https://mpago.la/1wXnouR",
+    "Pijamas (kit 2)": "https://mpago.la/1bJg5uN",
+
+    // === Categorias Especiais ===
+    // "special" não precisa - presentes personalizados não envolvem pagamento
+    "free": "http://link.mercadopago.com.br/presentemelissa" // Contribuição livre (poupança da Mel)
+};
+
 const APPS_SCRIPT_GIFTS_URL = 'https://script.google.com/macros/s/AKfycbzTHYSN0o-zqqN_XxaulQaBc3dbkFzPRg6JXoCdxzE1dASXLOzfQuzLXhVu7rnUIvjU/exec';
 
 // Novo Gift Manager
@@ -229,6 +266,9 @@ class NewGiftManager {
     }
 
     showPaymentModal(giftName, price, emoji) {
+        // Buscar link específico do Mercado Pago para este presente
+        const mercadoPagoLink = MERCADO_PAGO_LINKS[giftName] || MERCADO_PAGO_LINKS["free"];
+
         const modal = document.createElement('div');
         modal.className = 'payment-modal';
         modal.innerHTML = `
@@ -258,7 +298,7 @@ class NewGiftManager {
                     <div class="payment-option">
                         <h3><i class="fas fa-credit-card"></i> Mercado Pago</h3>
                         <p class="payment-option-desc">Cartão de crédito, débito ou saldo</p>
-                        <button class="mercado-pago-btn" onclick="window.open('${MERCADO_PAGO_LINK}', '_blank')">
+                        <button class="mercado-pago-btn" onclick="window.open('${mercadoPagoLink}', '_blank')">
                             <i class="fas fa-external-link-alt"></i> Pagar com Mercado Pago
                         </button>
                     </div>
@@ -444,6 +484,9 @@ class NewGiftManager {
     }
 
     showFreeContribution() {
+        // Link para contribuição livre
+        const mercadoPagoLink = MERCADO_PAGO_LINKS["free"];
+
         const modal = document.createElement('div');
         modal.className = 'payment-modal';
         modal.innerHTML = `
@@ -473,7 +516,7 @@ class NewGiftManager {
                     <div class="payment-option">
                         <h3><i class="fas fa-credit-card"></i> Mercado Pago</h3>
                         <p class="payment-option-desc">Cartão de crédito, débito ou saldo</p>
-                        <button class="mercado-pago-btn" onclick="window.open('${MERCADO_PAGO_LINK}', '_blank')">
+                        <button class="mercado-pago-btn" onclick="window.open('${mercadoPagoLink}', '_blank')">
                             <i class="fas fa-external-link-alt"></i> Pagar com Mercado Pago
                         </button>
                     </div>
@@ -887,32 +930,20 @@ class RSVPManager {
 
 // Image Gallery Management
 class GalleryManager {
-    constructor() {
-        this.initGallery();
-    }
+    constructor() {}
 
-    initGallery() {
-        // Add click handlers for gallery items
-        document.querySelectorAll('.gallery-item').forEach(item => {
-            item.addEventListener('click', () => {
-                // Future: Open lightbox/modal for full-size view
-                console.log('Gallery item clicked - implement lightbox here');
-            });
-        });
-    }
-
-    // Method to add new images (for future use)
+    // Method to add new images dynamically (for future use)
     addImage(src, alt, type = 'image') {
         const galleryGrid = document.querySelector('.gallery-grid');
         const galleryItem = document.createElement('div');
         galleryItem.className = 'gallery-item';
-        
+
         if (type === 'image') {
             galleryItem.innerHTML = `<img src="${src}" alt="${alt}" loading="lazy">`;
         } else if (type === 'video') {
             galleryItem.innerHTML = `<video src="${src}" poster="" preload="metadata" controls></video>`;
         }
-        
+
         galleryGrid.appendChild(galleryItem);
     }
 }
@@ -1448,3 +1479,107 @@ function addGlobalEventListeners() {
 
 // Call on load
 window.addEventListener('load', addGlobalEventListeners);
+
+// ==== LIGHTBOX PARA GALERIA ====
+class Lightbox {
+    constructor() {
+        this.createLightboxHTML();
+        this.attachEventListeners();
+    }
+
+    createLightboxHTML() {
+        const lightboxHTML = `
+            <div id="lightbox" class="lightbox">
+                <span class="lightbox-close">&times;</span>
+                <span class="lightbox-prev">&#10094;</span>
+                <span class="lightbox-next">&#10095;</span>
+                <img class="lightbox-content" id="lightbox-img">
+                <div class="lightbox-caption"></div>
+            </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', lightboxHTML);
+    }
+
+    attachEventListeners() {
+        // Adicionar click em todas as imagens da galeria
+        const galleryImages = document.querySelectorAll('.gallery-item img');
+        galleryImages.forEach((img, index) => {
+            img.addEventListener('click', () => this.openLightbox(img, index, galleryImages));
+        });
+
+        // Botão fechar
+        document.querySelector('.lightbox-close').addEventListener('click', () => this.closeLightbox());
+
+        // Fechar ao clicar fora da imagem
+        document.getElementById('lightbox').addEventListener('click', (e) => {
+            if (e.target.id === 'lightbox') {
+                this.closeLightbox();
+            }
+        });
+
+        // Navegação
+        document.querySelector('.lightbox-prev').addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.navigate(-1);
+        });
+
+        document.querySelector('.lightbox-next').addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.navigate(1);
+        });
+
+        // Teclas do teclado
+        document.addEventListener('keydown', (e) => {
+            const lightbox = document.getElementById('lightbox');
+            if (lightbox.style.display === 'flex') {
+                if (e.key === 'Escape') this.closeLightbox();
+                if (e.key === 'ArrowLeft') this.navigate(-1);
+                if (e.key === 'ArrowRight') this.navigate(1);
+            }
+        });
+    }
+
+    openLightbox(img, index, allImages) {
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const caption = document.querySelector('.lightbox-caption');
+
+        this.currentIndex = index;
+        this.images = Array.from(allImages);
+
+        lightbox.style.display = 'flex';
+        lightboxImg.src = img.src;
+        caption.textContent = img.alt;
+
+        // Desabilitar scroll do body
+        document.body.style.overflow = 'hidden';
+    }
+
+    closeLightbox() {
+        const lightbox = document.getElementById('lightbox');
+        lightbox.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+
+    navigate(direction) {
+        this.currentIndex += direction;
+
+        // Loop: voltar ao início/fim
+        if (this.currentIndex < 0) {
+            this.currentIndex = this.images.length - 1;
+        } else if (this.currentIndex >= this.images.length) {
+            this.currentIndex = 0;
+        }
+
+        const lightboxImg = document.getElementById('lightbox-img');
+        const caption = document.querySelector('.lightbox-caption');
+
+        lightboxImg.src = this.images[this.currentIndex].src;
+        caption.textContent = this.images[this.currentIndex].alt;
+    }
+}
+
+// Inicializar lightbox quando DOM estiver pronto
+document.addEventListener('DOMContentLoaded', () => {
+    new Lightbox();
+});
