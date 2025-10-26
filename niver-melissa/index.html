@@ -18,10 +18,10 @@
             <ul class="nav-menu">
                 <li><a href="#home" class="nav-link">Início</a></li>
                 <li><a href="#about" class="nav-link">A festa</a></li>
+                <li><a href="#rsvp" class="nav-link">Confirmar</a></li>
                 <li><a href="#info" class="nav-link">Informações</a></li>
                 <li><a href="#gifts" class="nav-link">Presentes</a></li>
                 <li><a href="#gallery" class="nav-link">Galeria</a></li>
-                <li><a href="#rsvp" class="nav-link">Confirmar Presença</a></li>
             </ul>
             <div class="hamburger">
                 <span></span>
@@ -94,6 +94,77 @@
                 <div class="about-image">
                     <img src="img/hero/foto-historia.JPG" alt="Melissa - A História da Mel" loading="lazy">
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- RSVP Section -->
+    <section id="rsvp" class="rsvp">
+        <div class="container">
+            <div class="section-header">
+                <h2>Confirme sua Presença</h2>
+                <p>Precisamos saber quem estará conosco neste dia especial!</p>
+            </div>
+            <div class="rsvp-form">
+                <form id="rsvpForm" name="rsvp" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+                    <p style="display: none;">
+                        <label>Don't fill this out if you're human: <input name="bot-field" /></label>
+                    </p>
+                    <div class="form-group">
+                        <label for="name">Nome Completo *</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email *</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Telefone/WhatsApp *</label>
+                        <input type="tel" id="phone" name="phone" required placeholder="+55 11 99999-9999" pattern="[\+]?[0-9\s\-\(\)]{10,20}" title="Digite um telefone válido (ex: +55 11 99999-9999 ou 11999999999)">
+                        <small class="field-hint">Formato: +55 11 99999-9999 ou (11) 99999-9999</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="adults">Número de Adultos *</label>
+                        <select id="adults" name="adults" required>
+                            <option value="">Selecione</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="__other_option__">Outro</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="children">Número de Crianças *</label>
+                        <select id="children" name="children" required>
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="__other_option__">Outro</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="children-details-group" style="display: none;">
+                        <label for="children-details">Informações das Crianças *</label>
+                        <textarea id="children-details" name="children-details" rows="4" placeholder="Por favor, informe idade e sexo de cada criança&#10;Exemplo:&#10;- João, 3 anos, masculino&#10;- Maria, 5 anos, feminino"></textarea>
+                        <small class="field-hint">Informe nome, idade e sexo de cada criança (uma por linha)</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="dietary">Restrições Alimentares</label>
+                        <textarea id="dietary" name="dietary" placeholder="Descreva aqui qualquer restrição alimentar ou alergia"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Mensagem para a Mel</label>
+                        <textarea id="message" name="message" placeholder="Deixe uma mensagem carinhosa para nossa pequena guardiã!"></textarea>
+                    </div>
+                    <button type="submit" class="submit-button">
+                        <i class="fas fa-heart"></i>
+                        Confirmar Presença
+                    </button>
+                </form>
             </div>
         </div>
     </section>
@@ -237,77 +308,6 @@
         </div>
     </section>
 
-    <!-- RSVP Section -->
-    <section id="rsvp" class="rsvp">
-        <div class="container">
-            <div class="section-header">
-                <h2>Confirme sua Presença</h2>
-                <p>Precisamos saber quem estará conosco neste dia especial!</p>
-            </div>
-            <div class="rsvp-form">
-                <form id="rsvpForm" name="rsvp" method="POST" data-netlify="true" netlify-honeypot="bot-field">
-                    <p style="display: none;">
-                        <label>Don't fill this out if you're human: <input name="bot-field" /></label>
-                    </p>
-                    <div class="form-group">
-                        <label for="name">Nome Completo *</label>
-                        <input type="text" id="name" name="name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email *</label>
-                        <input type="email" id="email" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">Telefone/WhatsApp *</label>
-                        <input type="tel" id="phone" name="phone" required placeholder="+55 11 99999-9999" pattern="[\+]?[0-9\s\-\(\)]{10,20}" title="Digite um telefone válido (ex: +55 11 99999-9999 ou 11999999999)">
-                        <small class="field-hint">Formato: +55 11 99999-9999 ou (11) 99999-9999</small>
-                    </div>
-                    <div class="form-group">
-                        <label for="adults">Número de Adultos *</label>
-                        <select id="adults" name="adults" required>
-                            <option value="">Selecione</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="__other_option__">Outro</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="children">Número de Crianças *</label>
-                        <select id="children" name="children" required>
-                            <option value="0">0</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="__other_option__">Outro</option>
-                        </select>
-                    </div>
-                    <div class="form-group" id="children-details-group" style="display: none;">
-                        <label for="children-details">Informações das Crianças *</label>
-                        <textarea id="children-details" name="children-details" rows="4" placeholder="Por favor, informe idade e sexo de cada criança&#10;Exemplo:&#10;- João, 3 anos, masculino&#10;- Maria, 5 anos, feminino"></textarea>
-                        <small class="field-hint">Informe nome, idade e sexo de cada criança (uma por linha)</small>
-                    </div>
-                    <div class="form-group">
-                        <label for="dietary">Restrições Alimentares</label>
-                        <textarea id="dietary" name="dietary" placeholder="Descreva aqui qualquer restrição alimentar ou alergia"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="message">Mensagem para a Mel</label>
-                        <textarea id="message" name="message" placeholder="Deixe uma mensagem carinhosa para nossa pequena guardiã!"></textarea>
-                    </div>
-                    <button type="submit" class="submit-button">
-                        <i class="fas fa-heart"></i>
-                        Confirmar Presença
-                    </button>
-                </form>
-            </div>
-        </div>
-    </section>
-
     <!-- Audio Player -->
     <audio id="background-music" loop>
         <source src="audio/Winnie the Pooh.mp3" type="audio/mpeg">
@@ -348,7 +348,7 @@
                 </div>
                 <div class="footer-section">
                     <h3>1º Aniversário</h3>
-                    <p>Melissa - Guardiã do Bosque dos Cem Acres</p>
+                    <p>Melissa no Bosque dos Cem Acres</p>
                     <p>🍯 Feito com muito amor</p>
                 </div>
             </div>

@@ -1508,6 +1508,15 @@ section {
     animation: float 3s ease-in-out infinite;
 }
 
+.gift-icon-img {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    margin-bottom: 15px;
+    animation: float 3s ease-in-out infinite;
+    border-radius: 15px;
+}
+
 .gift-card h4 {
     font-family: 'Bubblegum Sans', cursive;
     font-size: 1.3rem;
@@ -1623,6 +1632,14 @@ section {
 .payment-header .gift-icon {
     font-size: 4rem;
     margin-bottom: 10px;
+}
+
+.payment-header .gift-icon-img {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    margin-bottom: 10px;
+    border-radius: 15px;
 }
 
 .payment-header h2 {

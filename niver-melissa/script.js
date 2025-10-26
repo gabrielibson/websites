@@ -71,33 +71,33 @@ const GIFTS_DATA = {
     "Aprendizagem e Desenvolvimento Motor": {
         icon: "fas fa-brain",
         items: [
-            { name: "Brinquedo de encaixe", price: 90, emoji: "🧩" },
-            { name: "Torre de anéis", price: 60, emoji: "🎯" },
-            { name: "Blocos de montar", price: 120, emoji: "🧱" },
-            { name: "Mesa de atividades", price: 250, emoji: "🎨" },
-            { name: "Quebra-cabeça de madeira", price: 80, emoji: "🪵" },
-            { name: "Brinquedo de puxar", price: 70, emoji: "🚂" }
+            { name: "Brinquedo de encaixe", price: 90, image: "img/icones-presentes/brinquedo-encaixe.jpeg" },
+            { name: "Torre de anéis", price: 60, image: "img/icones-presentes/torre-aprendizagem.jpeg" },
+            { name: "Blocos de montar", price: 120, image: "img/icones-presentes/bloco-montar.jpeg" },
+            { name: "Mesa de atividades", price: 250, image: "img/icones-presentes/mesa-atividades.jpeg" },
+            { name: "Quebra-cabeça de madeira", price: 80, image: "img/icones-presentes/quebra-cabeca.jpeg" },
+            { name: "Brinquedo de puxar", price: 70, image: "img/icones-presentes/brinquedo-de-puxar.jpeg" }
         ]
     },
     "Cavalgáveis e Andadores": {
         icon: "fas fa-horse",
         items: [
-            { name: "Andador educativo", price: 280, emoji: "🚶" },
-            { name: "Cavalinho de balanço", price: 220, emoji: "🐴" },
-            { name: "Triciclo com empurrador", price: 350, emoji: "🚲" },
-            { name: "Carrinho de empurrar", price: 150, emoji: "🛒" },
-            { name: "Balanço infantil", price: 200, emoji: "🪀" }
+            { name: "Cavalinho de balanço", price: 220, image: "img/icones-presentes/cavalinho.jpeg" },
+            { name: "Triciclo com empurrador", price: 350, image: "img/icones-presentes/triciclo.jpeg" },
+            { name: "Carrinho de empurrar", price: 150, image: "img/icones-presentes/carrinho-de-empurrar.jpeg" },
+            { name: "Balanço infantil", price: 200, image: "img/icones-presentes/balanco-infantil.jpeg" }
         ]
     },
     "Brinquedos e Livros": {
         icon: "fas fa-book",
         items: [
-            { name: "Livrinhos infantis (kit 5)", price: 100, emoji: "📚" },
-            { name: "Livros de pano/plástico", price: 60, emoji: "📖" },
-            { name: "Brinquedo musical", price: 130, emoji: "🎹" },
-            { name: "Bonecos/Pelúcias", price: 90, emoji: "🧸" },
-            { name: "Brinquedos para banho", price: 50, emoji: "🛁" },
-            { name: "Massinha de modelar", price: 45, emoji: "🎨" }
+            { name: "Cozinha de madeira", price: 300, image: "img/icones-presentes/cozinha-de-madeira.jpeg" },
+            { name: "Livrinhos infantis (kit 5)", price: 100, image: "img/icones-presentes/livros.jpeg" },
+            { name: "Livros de pano/plástico", price: 60, image: "img/icones-presentes/livro-de-pano.jpeg" },
+            { name: "Brinquedo musical", price: 130, image: "img/icones-presentes/musical.jpeg" },
+            { name: "Bonecos/Pelúcias", price: 90, image: "img/icones-presentes/pelucia.jpeg" },
+            { name: "Brinquedos para banho", price: 50, image: "img/icones-presentes/brinquedos-banho.jpeg" },
+            { name: "Massinha de modelar", price: 45, image: "img/icones-presentes/massinha-de-modelar.jpeg" }
         ]
     },
     "Vestuário (18-24 meses)": {
@@ -125,13 +125,13 @@ const MERCADO_PAGO_LINKS = {
     "Brinquedo de puxar": "https://mpago.la/1WzgUyg",
 
     // === Cavalgáveis e Andadores ===
-    "Andador educativo": "https://mpago.la/33qXsVB",
     "Cavalinho de balanço": "https://mpago.la/1LUoCxw",
     "Triciclo com empurrador": "https://mpago.la/1vNgfTY",
     "Carrinho de empurrar": "https://mpago.la/1fWYWDR",
     "Balanço infantil": "https://mpago.la/1f1kv1f",
 
     // === Brinquedos e Livros ===
+    "Cozinha de madeira": "https://mpago.la/2VKqg8x",
     "Livrinhos infantis (kit 5)": "https://mpago.la/1r6D6ijI",
     "Livros de pano/plástico": "https://mpago.la/1mTnizF",
     "Brinquedo musical": "https://mpago.la/2iRk17n",
@@ -255,19 +255,31 @@ class NewGiftManager {
     }
 
     createGiftCard(item) {
+        // Usar imagem se disponível, senão usar emoji
+        const iconHTML = item.image
+            ? `<img src="${item.image}" alt="${item.name}" class="gift-icon-img">`
+            : `<div class="gift-icon">${item.emoji}</div>`;
+
+        const iconForModal = item.image || item.emoji;
+
         return `
             <div class="gift-card" data-gift="${item.name}" data-price="${item.price}">
-                <div class="gift-icon">${item.emoji}</div>
+                ${iconHTML}
                 <h4>${item.name}</h4>
                 <p class="gift-price">R$ ${item.price.toFixed(2).replace('.', ',')}</p>
-                <button class="gift-btn" onclick="giftManager.showPaymentModal('${item.name}', ${item.price}, '${item.emoji}')">Presentear</button>
+                <button class="gift-btn" onclick="giftManager.showPaymentModal('${item.name}', ${item.price}, '${iconForModal}')">Presentear</button>
             </div>
         `;
     }
 
-    showPaymentModal(giftName, price, emoji) {
+    showPaymentModal(giftName, price, icon) {
         // Buscar link específico do Mercado Pago para este presente
         const mercadoPagoLink = MERCADO_PAGO_LINKS[giftName] || MERCADO_PAGO_LINKS["free"];
+
+        // Verificar se é imagem ou emoji
+        const iconHTML = icon.startsWith('img/')
+            ? `<img src="${icon}" alt="${giftName}" class="gift-icon-img">`
+            : `<div class="gift-icon">${icon}</div>`;
 
         const modal = document.createElement('div');
         modal.className = 'payment-modal';
@@ -277,7 +289,7 @@ class NewGiftManager {
                     <i class="fas fa-times"></i>
                 </button>
                 <div class="payment-header">
-                    <div class="gift-icon">${emoji}</div>
+                    ${iconHTML}
                     <h2>${giftName}</h2>
                     <p class="price">R$ ${price.toFixed(2).replace('.', ',')}</p>
                 </div>
